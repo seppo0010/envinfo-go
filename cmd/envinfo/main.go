@@ -24,6 +24,10 @@ func GetBinaries() []*envinfo.Item {
 	if nodeversion != nil {
 		items = append(items, nodeversion)
 	}
+	npmversion, _ := envinfo.GetNpmVersion()
+	if npmversion != nil {
+		items = append(items, npmversion)
+	}
 	return items
 }
 
