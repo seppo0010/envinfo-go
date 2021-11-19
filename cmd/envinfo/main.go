@@ -9,29 +9,33 @@ import (
 	"github.com/seppo0010/envinfo-go"
 )
 
-func GetLanguages() map[string]string {
+func GetLanguages() []*envinfo.Item {
+	items := []*envinfo.Item{}
 	goversion, _ := envinfo.GetGoVersion()
-	return map[string]string{
-		"Go": goversion,
+	if goversion != nil {
+		items = append(items, goversion)
 	}
+	return items
 }
 
-func GetBinaries() map[string]string {
+func GetBinaries() []*envinfo.Item {
+	items := []*envinfo.Item{}
 	nodeversion, _ := envinfo.GetNodeVersion()
-	return map[string]string{
-		"Node": nodeversion,
+	if nodeversion != nil {
+		items = append(items, nodeversion)
 	}
+	return items
 }
 
 type Versions struct {
-	Languages map[string]string
-	Binaries  map[string]string
+	Languages []*envinfo.Item
+	Binaries  []*envinfo.Item
 }
 
 func NewVersions() *Versions {
 	return &Versions{
-		Languages: map[string]string{},
-		Binaries:  map[string]string{},
+		Languages: []*envinfo.Item{},
+		Binaries:  []*envinfo.Item{},
 	}
 }
 
@@ -43,15 +47,17 @@ func main() {
 	PrintCLI("Binaries", versions.Binaries, os.Stdout)
 }
 
-func PrintCLI(title string, versions map[string]string, w io.Writer) {
+func PrintCLI(title string, versions []*envinfo.Item, w io.Writer) {
 	io.WriteString(w, "  ")
 	io.WriteString(w, chalk.Underline.TextStyle(title))
 	io.WriteString(w, "\n")
-	for name, version := range versions {
+	for _, item := range versions {
 		io.WriteString(w, "    ")
-		io.WriteString(w, name)
+		io.WriteString(w, item.Name)
 		io.WriteString(w, ": ")
-		io.WriteString(w, version)
+		io.WriteString(w, item.Version)
+		io.WriteString(w, " - ")
+		io.WriteString(w, item.Path)
 		io.WriteString(w, "\n")
 	}
 	io.WriteString(w, "\n")
