@@ -9,28 +9,6 @@ import (
 	"github.com/seppo0010/envinfo-go"
 )
 
-func GetLanguages() []*envinfo.Item {
-	items := []*envinfo.Item{}
-	goversion, _ := envinfo.GetGoVersion()
-	if goversion != nil {
-		items = append(items, goversion)
-	}
-	return items
-}
-
-func GetBinaries() []*envinfo.Item {
-	items := []*envinfo.Item{}
-	nodeversion, _ := envinfo.GetNodeVersion()
-	if nodeversion != nil {
-		items = append(items, nodeversion)
-	}
-	npmversion, _ := envinfo.GetNpmVersion()
-	if npmversion != nil {
-		items = append(items, npmversion)
-	}
-	return items
-}
-
 type Versions struct {
 	Languages []*envinfo.Item
 	Binaries  []*envinfo.Item
@@ -45,8 +23,8 @@ func NewVersions() *Versions {
 
 func main() {
 	versions := NewVersions()
-	versions.Languages = GetLanguages()
-	versions.Binaries = GetBinaries()
+	versions.Languages = envinfo.GetLanguages()
+	versions.Binaries = envinfo.GetBinaries()
 	PrintCLI("Languages", versions.Languages, os.Stdout)
 	PrintCLI("Binaries", versions.Binaries, os.Stdout)
 }
