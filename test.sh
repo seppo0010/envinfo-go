@@ -2,15 +2,17 @@
 set -Eeux
 docker build -t envinfo .
 
-tests=${@:-integration-test/*/*}
+tests=${@:-integration-test/*/*/*}
 for t in $tests; do
 	pushd "./$t"
-	expected_version=$(basename $t)
+	expected_value=$(cat expected) || expected_value=$(basename $t)
 	name=$(basename $(dirname $t))
 	docker build -t envinfo/test .
 	out="$(docker run envinfo/test 2>&1)"
-	version=$(echo -n "$out" |grep -w " $name:" |cut -d ':' -f 2 |awk '{print $1}')
-	test "$version" == $expected_version
+	value=$(echo -n "$out" |grep -w " $name:" |cut -d ':' -f 2)
+	if [[ "${value:1}" != $expected_value* ]]; then
+		exit 1;
+	fi
 	popd
 done
 
