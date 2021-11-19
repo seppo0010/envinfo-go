@@ -1,9 +1,10 @@
 package envinfo
 
 import (
-	"regexp"
 	"os/exec"
+	"regexp"
 )
+
 var versionRegex = regexp.MustCompile(`\d+\.[\d+|.]+`)
 
 func GetGoVersion() (string, error) {
