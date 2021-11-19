@@ -2,7 +2,8 @@
 set -Eeux
 docker build -t envinfo .
 
-for t in integration-test/*/*; do
+tests=${@:-integration-test/*/*}
+for t in $tests; do
 	pushd "./$t"
 	expected_version=$(basename $t)
 	name=$(basename $(dirname $t))
