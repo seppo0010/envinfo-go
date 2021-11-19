@@ -11,3 +11,5 @@ for t in integration-test/*/*; do
 	test "$version" == $expected_version
 	popd
 done
+
+echo "Test finished successfully!"
