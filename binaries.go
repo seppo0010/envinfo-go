@@ -10,6 +10,10 @@ func GetBinaries() []*Item {
 	if npmversion != nil {
 		items = append(items, npmversion)
 	}
+	yarnversion, _ := GetYarnVersion()
+	if yarnversion != nil {
+		items = append(items, yarnversion)
+	}
 	return items
 }
 
@@ -19,4 +23,8 @@ func GetGoVersion() (*Item, error) {
 
 func GetNpmVersion() (*Item, error) {
 	return GetItem("npm", "npm", "--version")
+}
+
+func GetYarnVersion() (*Item, error) {
+	return GetItem("yarn", "Yarn", "--version")
 }

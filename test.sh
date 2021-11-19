@@ -8,7 +8,8 @@ for t in $tests; do
 	expected_version=$(basename $t)
 	name=$(basename $(dirname $t))
 	docker build -t envinfo/test .
-	version=$(docker run envinfo/test 2>&1 |grep -w " $name:" |cut -d ':' -f 2 |awk '{print $1}')
+	out="$(docker run envinfo/test 2>&1)"
+	version=$(echo -n "$out" |grep -w " $name:" |cut -d ':' -f 2 |awk '{print $1}')
 	test "$version" == $expected_version
 	popd
 done
