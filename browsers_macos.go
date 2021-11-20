@@ -40,3 +40,18 @@ func GetEdgeVersion() (*Item, error) {
 	name := "Microsoft Edge"
 	return getApplication(name, browserBundleIdentifiers[name])
 }
+
+func GetFirefoxVersion() (*Item, error) {
+	name := "Firefox"
+	return getApplication(name, browserBundleIdentifiers[name])
+}
+
+func GetFirefoxDeveloperEditionVersion() (*Item, error) {
+	name := "Firefox Developer Edition"
+	return getApplication(name, browserBundleIdentifiers[name])
+}
+
+func GetFirefoxNightlyVersion() (*Item, error) {
+	name := "Firefox Nightly"
+	return getApplication(name, browserBundleIdentifiers[name])
+}

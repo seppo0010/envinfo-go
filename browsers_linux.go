@@ -34,3 +34,19 @@ func GetEdgeVersion() (*Item, error) {
 		Version: "",
 	}, nil
 }
+
+func GetFirefoxVersion() (*Item, error) {
+	return GetItem("firefox", "Firefox", "--version")
+}
+
+func GetFirefoxNightlyVersion() (*Item, error) {
+	return GetItem("firefox-trunk", "Firefox Nightly", "--version")
+}
+
+func GetFirefoxDeveloperEditionVersion() (*Item, error) {
+	return &Item{
+		Name:    "Firefox Developer Edition",
+		Path:    "",
+		Version: "",
+	}, nil
+}
