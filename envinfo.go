@@ -47,28 +47,28 @@ func (b *EnvInfoBuilder) Build() *EnvInfo {
 	var wg sync.WaitGroup
 	if b.languages {
 		wg.Add(1)
-		func() {
+		go func() {
 			defer wg.Done()
 			envinfo.Languages = GetLanguages()
 		}()
 	}
 	if b.browsers {
 		wg.Add(1)
-		func() {
+		go func() {
 			defer wg.Done()
 			envinfo.Browsers = GetBrowsers()
 		}()
 	}
 	if b.binaries {
 		wg.Add(1)
-		func() {
+		go func() {
 			defer wg.Done()
 			envinfo.Binaries = GetBinaries()
 		}()
 	}
 	if b.system {
 		wg.Add(1)
-		func() {
+		go func() {
 			defer wg.Done()
 			envinfo.System = GetSystem()
 		}()
