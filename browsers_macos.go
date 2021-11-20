@@ -7,6 +7,7 @@ var browserBundleIdentifiers = map[string]string{
 	"Brave Browser":             "com.brave.Browser",
 	"Chrome":                    "com.google.Chrome",
 	"Chrome Canary":             "com.google.Chrome.canary",
+	"Chromium":                  "org.chromium.Chromium",
 	"Firefox":                   "org.mozilla.firefox",
 	"Firefox Developer Edition": "org.mozilla.firefoxdeveloperedition",
 	"Firefox Nightly":           "org.mozilla.nightly",
@@ -27,5 +28,10 @@ func GetChromeVersion() (*Item, error) {
 
 func GetChromeCanaryVersion() (*Item, error) {
 	name := "Chrome Canary"
+	return getApplication(name, browserBundleIdentifiers[name])
+}
+
+func GetChromiumVersion() (*Item, error) {
+	name := "Chromium"
 	return getApplication(name, browserBundleIdentifiers[name])
 }

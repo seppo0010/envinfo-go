@@ -22,3 +22,7 @@ func GetChromeCanaryVersion() (*Item, error) {
 		Version: "",
 	}, nil
 }
+
+func GetChromiumVersion() (*Item, error) {
+	return GetItem("chromium", "Chromium", "--version")
+}
