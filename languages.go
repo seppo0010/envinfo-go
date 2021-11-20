@@ -18,6 +18,7 @@ func GetLanguages() []*Item {
 		GetJavaVersion,
 		GetPerlVersion,
 		GetPHPVersion,
+		GetProtocVersion,
 	})
 }
 
@@ -79,4 +80,8 @@ func GetPerlVersion() (*Item, error) {
 
 func GetPHPVersion() (*Item, error) {
 	return GetItem("php", "PHP", "--version")
+}
+
+func GetProtocVersion() (*Item, error) {
+	return GetItem("protoc", "Protoc", "--version")
 }
