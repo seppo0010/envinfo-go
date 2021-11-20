@@ -1,19 +1,26 @@
 package envinfo
 
+import "sync"
+
 func GetBinaries() []*Item {
-	items := []*Item{}
-	nodeversion, _ := GetNodeVersion()
-	if nodeversion != nil {
-		items = append(items, nodeversion)
+	funcs := []func() (*Item, error){GetNodeVersion, GetNpmVersion, GetYarnVersion}
+	results := make(chan (*Item), len(funcs))
+	var wg sync.WaitGroup
+	for _, f := range funcs {
+		wg.Add(1)
+		go func(f func() (*Item, error)) {
+			defer wg.Done()
+			res, _ := f()
+			results <- res
+		}(f)
 	}
-	npmversion, _ := GetNpmVersion()
-	if npmversion != nil {
-		items = append(items, npmversion)
+	wg.Wait()
+
+	items := make([]*Item, len(funcs))
+	for i, _ := range items {
+		items[i] = <-results
 	}
-	yarnversion, _ := GetYarnVersion()
-	if yarnversion != nil {
-		items = append(items, yarnversion)
-	}
+
 	return items
 }
 
