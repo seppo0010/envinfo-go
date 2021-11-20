@@ -7,6 +7,7 @@ import (
 	"sort"
 	"strings"
 	"sync"
+	"time"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -48,6 +49,7 @@ func (b *GetItemBuilder) Stderr() *GetItemBuilder {
 }
 
 func (b *GetItemBuilder) Get() (*Item, error) {
+	start := time.Now()
 	log.WithFields(log.Fields{
 		"executable": b.executable,
 		"name":       b.name,
@@ -83,6 +85,10 @@ func (b *GetItemBuilder) Get() (*Item, error) {
 		parseBytes = append(parseBytes, errb.Bytes()...)
 	}
 	version := strings.TrimSpace(b.regex.FindString(string(parseBytes)))
+	log.WithFields(log.Fields{
+		"name":     b.name,
+		"duration": time.Now().Sub(start),
+	}).Debug("parsed version")
 	return &Item{
 		Name:    b.name,
 		Version: version,
