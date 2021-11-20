@@ -23,6 +23,7 @@ func GetLanguages() []*Item {
 		GetPython3Version,
 		GetRVersion,
 		GetRubyVersion,
+		GetRustVersion,
 	})
 }
 
@@ -101,4 +102,8 @@ func GetRVersion() (*Item, error) {
 
 func GetRubyVersion() (*Item, error) {
 	return GetItem("ruby", "Ruby", "--version")
+}
+
+func GetRustVersion() (*Item, error) {
+	return GetItem("rustc", "Rust", "--version")
 }
