@@ -9,7 +9,16 @@ import (
 )
 
 func GetLanguages() []*Item {
-	return getItems([]func() (*Item, error){GetGoVersion, GetNodeVersion, GetBashVersion, GetElixirVersion, GetErlangVersion, GetJavaVersion, GetPerlVersion})
+	return getItems([]func() (*Item, error){
+		GetGoVersion,
+		GetNodeVersion,
+		GetBashVersion,
+		GetElixirVersion,
+		GetErlangVersion,
+		GetJavaVersion,
+		GetPerlVersion,
+		GetPHPVersion,
+	})
 }
 
 func GetNodeVersion() (*Item, error) {
@@ -66,4 +75,8 @@ func GetJavaVersion() (*Item, error) {
 
 func GetPerlVersion() (*Item, error) {
 	return GetItem("perl", "Perl", "--version")
+}
+
+func GetPHPVersion() (*Item, error) {
+	return GetItem("php", "PHP", "--version")
 }
