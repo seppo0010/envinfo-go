@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"os/exec"
 	"regexp"
+	"sort"
 	"strings"
 	"sync"
 
@@ -97,6 +98,12 @@ func GetItem(executable, name, flag string) (*Item, error) {
 	return NewGetItemBuilder(executable, name, flag).Get()
 }
 
+type ByName []*Item
+
+func (a ByName) Len() int           { return len(a) }
+func (a ByName) Less(i, j int) bool { return a[i].Name < a[j].Name }
+func (a ByName) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+
 func getItems(funcs []func() (*Item, error)) []*Item {
 	results := make(chan (*Item), len(funcs))
 	var wg sync.WaitGroup
@@ -118,5 +125,6 @@ func getItems(funcs []func() (*Item, error)) []*Item {
 		}
 	}
 
+	sort.Sort(ByName(items))
 	return items
 }
