@@ -19,6 +19,8 @@ func GetLanguages() []*Item {
 		GetPerlVersion,
 		GetPHPVersion,
 		GetProtocVersion,
+		GetPythonVersion,
+		GetPython3Version,
 	})
 }
 
@@ -67,11 +69,7 @@ func GetErlangVersion() (*Item, error) {
 func GetJavaVersion() (*Item, error) {
 	versionRegex := regexp.MustCompile(`\d+\.?[\w+|.|_|-]+`)
 	executable, name, flag, regex := "javac", "Java", "-version", versionRegex
-	item, err := NewGetItemBuilder(executable, name, flag).Regex(regex).Stderr().Get()
-	if err != nil {
-		return nil, err
-	}
-	return item, nil
+	return NewGetItemBuilder(executable, name, flag).Regex(regex).Stderr().Get()
 }
 
 func GetPerlVersion() (*Item, error) {
@@ -84,4 +82,13 @@ func GetPHPVersion() (*Item, error) {
 
 func GetProtocVersion() (*Item, error) {
 	return GetItem("protoc", "Protoc", "--version")
+}
+
+func GetPythonVersion() (*Item, error) {
+	executable, name, flag := "python", "Python", "--version"
+	return NewGetItemBuilder(executable, name, flag).Stderr().NoStdout().Get()
+}
+
+func GetPython3Version() (*Item, error) {
+	return GetItem("python3", "Python3", "--version")
 }
