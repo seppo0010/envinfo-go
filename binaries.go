@@ -15,10 +15,13 @@ func GetBinaries() []*Item {
 		}(f)
 	}
 	wg.Wait()
+	close(results)
 
-	items := make([]*Item, len(funcs))
-	for i, _ := range items {
-		items[i] = <-results
+	items := make([]*Item, 0, len(funcs))
+	for item := range results {
+		if item != nil {
+			items = append(items, item)
+		}
 	}
 
 	return items
