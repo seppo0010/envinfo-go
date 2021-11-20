@@ -12,7 +12,10 @@ import (
 )
 
 type Options struct {
-	Verbose []bool `short:"v" long:"verbose" description:"Show verbose debug information"`
+	Verbose   []bool `short:"v" long:"verbose" description:"Show verbose debug information"`
+	System    bool   `long:"system" description:"Print general system info such as OS, CPU, Memory and Shell"`
+	Languages bool   `long:"languages" description:"Get version numbers of installed languages such as Java, Python, PHP, etc"`
+	Binaries  bool   `long:"binaries" description:"Get version numbers of node, npm, watchman, etc"`
 }
 
 func main() {
@@ -40,10 +43,33 @@ func main() {
 		log.SetLevel(log.ErrorLevel)
 	}
 
-	envInfo := envinfo.NewEnvInfo()
-	PrintCLI("System", SystemToItems(envInfo.System), os.Stdout)
-	PrintCLI("Languages", envInfo.Languages, os.Stdout)
-	PrintCLI("Binaries", envInfo.Binaries, os.Stdout)
+	if !opts.System && !opts.Languages && !opts.Binaries {
+		opts.System = true
+		opts.Languages = true
+		opts.Binaries = true
+	}
+
+	builder := envinfo.NewEnvInfoBuilder()
+	if opts.System {
+		builder.System()
+	}
+	if opts.Languages {
+		builder.Languages()
+	}
+	if opts.Binaries {
+		builder.Binaries()
+	}
+	envInfo := builder.Build()
+
+	if opts.System {
+		PrintCLI("System", SystemToItems(envInfo.System), os.Stdout)
+	}
+	if opts.Languages {
+		PrintCLI("Languages", envInfo.Languages, os.Stdout)
+	}
+	if opts.Binaries {
+		PrintCLI("Binaries", envInfo.Binaries, os.Stdout)
+	}
 }
 
 func PrintCLI(title string, item []*envinfo.Item, w io.Writer) {

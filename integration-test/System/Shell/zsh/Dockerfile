@@ -6,4 +6,4 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 COPY --from=0 /build/envinfo ./
 ENV SHELL=/bin/zsh
-CMD ["./envinfo"]
+CMD ["./envinfo", "--system"]
