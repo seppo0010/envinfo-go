@@ -34,7 +34,10 @@ func main() {
 		return
 	}
 
-	log.SetFormatter(&log.TextFormatter{})
+	log.SetFormatter(&log.TextFormatter{
+		TimestampFormat: "2006-01-02 15:04:05.000",
+		FullTimestamp:   true,
+	})
 	log.SetOutput(os.Stderr)
 	if len(opts.Verbose) > 3 {
 		log.SetLevel(log.DebugLevel)
