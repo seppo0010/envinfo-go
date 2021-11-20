@@ -1,9 +1,11 @@
 package main
 
 import (
+	"flag"
 	"io"
 	"os"
 
+	log "github.com/sirupsen/logrus"
 	"github.com/ttacon/chalk"
 
 	"github.com/seppo0010/envinfo-go"
@@ -54,6 +56,15 @@ func SystemToItems(system *envinfo.System) []*envinfo.Item {
 }
 
 func main() {
+	verbose := flag.Bool("v", false, "show debug logs")
+	flag.Parse()
+
+	if *verbose {
+		log.SetFormatter(&log.TextFormatter{})
+		log.SetOutput(os.Stderr)
+		log.SetLevel(log.DebugLevel)
+	}
+
 	envInfo := NewEnvInfo()
 	envInfo.Languages = envinfo.GetLanguages()
 	envInfo.Binaries = envinfo.GetBinaries()
