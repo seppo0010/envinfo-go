@@ -35,3 +35,8 @@ func GetChromiumVersion() (*Item, error) {
 	name := "Chromium"
 	return getApplication(name, browserBundleIdentifiers[name])
 }
+
+func GetEdgeVersion() (*Item, error) {
+	name := "Microsoft Edge"
+	return getApplication(name, browserBundleIdentifiers[name])
+}

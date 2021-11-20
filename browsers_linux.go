@@ -26,3 +26,11 @@ func GetChromeCanaryVersion() (*Item, error) {
 func GetChromiumVersion() (*Item, error) {
 	return GetItem("chromium", "Chromium", "--version")
 }
+
+func GetEdgeVersion() (*Item, error) {
+	return &Item{
+		Name:    "Microsoft Edge",
+		Path:    "",
+		Version: "",
+	}, nil
+}

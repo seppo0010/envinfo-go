@@ -6,5 +6,6 @@ func GetBrowsers() []*Item {
 		GetChromeVersion,
 		GetChromeCanaryVersion,
 		GetChromiumVersion,
+		GetEdgeVersion,
 	})
 }
