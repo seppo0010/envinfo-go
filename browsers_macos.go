@@ -55,3 +55,8 @@ func GetFirefoxNightlyVersion() (*Item, error) {
 	name := "Firefox Nightly"
 	return getApplication(name, browserBundleIdentifiers[name])
 }
+
+func GetSafariVersion() (*Item, error) {
+	name := "Safari"
+	return getApplication(name, browserBundleIdentifiers[name])
+}

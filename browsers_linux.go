@@ -50,3 +50,11 @@ func GetFirefoxDeveloperEditionVersion() (*Item, error) {
 		Version: "",
 	}, nil
 }
+
+func GetSafariVersion() (*Item, error) {
+	return &Item{
+		Name:    "Safari",
+		Path:    "",
+		Version: "",
+	}, nil
+}
