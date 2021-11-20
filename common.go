@@ -4,6 +4,8 @@ import (
 	"os/exec"
 	"regexp"
 	"strings"
+    "sync"
+
 
 	log "github.com/sirupsen/logrus"
 )
@@ -34,3 +36,28 @@ func GetItem(executable, name, flag string) (*Item, error) {
 		Path:    string(which),
 	}, nil
 }
+
+func getItems(funcs []func() (*Item, error)) []*Item {
+	results := make(chan (*Item), len(funcs))
+	var wg sync.WaitGroup
+	for _, f := range funcs {
+		wg.Add(1)
+		go func(f func() (*Item, error)) {
+			defer wg.Done()
+			res, _ := f()
+			results <- res
+		}(f)
+	}
+	wg.Wait()
+	close(results)
+
+	items := make([]*Item, 0, len(funcs))
+	for item := range results {
+		if item != nil {
+			items = append(items, item)
+		}
+	}
+
+	return items
+}
+
