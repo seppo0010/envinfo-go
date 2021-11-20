@@ -31,6 +31,10 @@ func SystemToItems(system *envinfo.System) []*envinfo.Item {
 			Name:    "OS",
 			Version: system.OS,
 		},
+		&envinfo.Item{
+			Name:    "CPU",
+			Version: system.CPU,
+		},
 	}
 }
 
