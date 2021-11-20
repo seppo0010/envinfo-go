@@ -1,6 +1,7 @@
 package envinfo
 
 import (
+	"bytes"
 	"os/exec"
 	"regexp"
 	"strings"
@@ -11,32 +12,88 @@ import (
 
 var versionRegex = regexp.MustCompile(`\d+\.[\d+|.]+`)
 
-func GetItemRegex(executable, name, flag string, regex *regexp.Regexp) (*Item, error) {
+type GetItemBuilder struct {
+	executable string
+	name       string
+	flag       string
+	regex      *regexp.Regexp
+	stdout     bool
+	stderr     bool
+}
+
+func NewGetItemBuilder(executable, name, flag string) *GetItemBuilder {
+	return &GetItemBuilder{
+		executable: executable,
+		name:       name,
+		flag:       flag,
+		regex:      versionRegex,
+		stdout:     true,
+	}
+}
+
+func (b *GetItemBuilder) Regex(regex *regexp.Regexp) *GetItemBuilder {
+	b.regex = regex
+	return b
+}
+
+func (b *GetItemBuilder) NoStdout() *GetItemBuilder {
+	b.stdout = false
+	return b
+}
+
+func (b *GetItemBuilder) Stderr() *GetItemBuilder {
+	b.stderr = true
+	return b
+}
+
+func (b *GetItemBuilder) Get() (*Item, error) {
 	log.WithFields(log.Fields{
-		"executable": executable,
-		"name":       name,
-		"flag":       flag,
+		"executable": b.executable,
+		"name":       b.name,
+		"flag":       b.flag,
 	}).Debug("looking for executable")
 
-	cmd := exec.Command("which", executable)
-	whichBytes, err := cmd.Output()
+	whichCmd := exec.Command("which", b.executable)
+	whichBytes, err := whichCmd.Output()
 	if err != nil {
 		log.WithFields(log.Fields{
-			"stderr": string(err.(*exec.ExitError).Stderr),
+			"name": b.name,
 		}).Warn("executable not found")
 		return nil, err
 	}
 	which := strings.TrimSpace(string(whichBytes))
-	cmd = exec.Command(string(which), flag)
-	stdout, _ := cmd.Output()
+	cmd := exec.Command(string(which), b.flag)
+	var outb, errb bytes.Buffer
+	cmd.Stdout = &outb
+	cmd.Stderr = &errb
+
+	_ = cmd.Run()
+	log.WithFields(log.Fields{
+		"name":   b.name,
+		"cmd":    []string{string(which), b.flag},
+		"stdout": string(outb.Bytes()),
+		"stderr": string(errb.Bytes()),
+	}).Debug("unparsed version")
+	var parseBytes []byte
+	if b.stdout {
+		parseBytes = append(parseBytes, outb.Bytes()...)
+	}
+	if b.stderr {
+		parseBytes = append(parseBytes, errb.Bytes()...)
+	}
+	version := strings.TrimSpace(b.regex.FindString(string(parseBytes)))
 	return &Item{
-		Name:    name,
-		Version: strings.TrimSpace(regex.FindString(string(stdout))),
+		Name:    b.name,
+		Version: version,
 		Path:    string(which),
 	}, nil
 }
+
+func GetItemRegex(executable, name, flag string, regex *regexp.Regexp) (*Item, error) {
+	return NewGetItemBuilder(executable, name, flag).Regex(regex).Get()
+}
 func GetItem(executable, name, flag string) (*Item, error) {
-	return GetItemRegex(executable, name, flag, versionRegex)
+	return NewGetItemBuilder(executable, name, flag).Get()
 }
 
 func getItems(funcs []func() (*Item, error)) []*Item {

@@ -9,7 +9,7 @@ import (
 )
 
 func GetLanguages() []*Item {
-	return getItems([]func() (*Item, error){GetGoVersion, GetNodeVersion, GetBashVersion, GetElixirVersion, GetErlangVersion})
+	return getItems([]func() (*Item, error){GetGoVersion, GetNodeVersion, GetBashVersion, GetElixirVersion, GetErlangVersion, GetJavaVersion})
 }
 
 func GetNodeVersion() (*Item, error) {
@@ -41,9 +41,7 @@ func GetErlangVersion() (*Item, error) {
 	cmd := exec.Command("which", "erl")
 	whichBytes, err := cmd.Output()
 	if err != nil {
-		log.WithFields(log.Fields{
-			"stderr": string(err.(*exec.ExitError).Stderr),
-		}).Warn("executable not found")
+		log.WithFields(log.Fields{}).Warn("executable not found")
 		return nil, err
 	}
 	which := strings.TrimSpace(string(whichBytes))
@@ -54,4 +52,14 @@ func GetErlangVersion() (*Item, error) {
 		Version: strings.TrimSpace(string(stdout)),
 		Path:    string(which),
 	}, nil
+}
+
+func GetJavaVersion() (*Item, error) {
+	versionRegex := regexp.MustCompile(`\d+\.?[\w+|.|_|-]+`)
+	executable, name, flag, regex := "javac", "Java", "-version", versionRegex
+	item, err := NewGetItemBuilder(executable, name, flag).Regex(regex).Stderr().Get()
+	if err != nil {
+		return nil, err
+	}
+	return item, nil
 }
