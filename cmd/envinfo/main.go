@@ -20,12 +20,6 @@ type Options struct {
 	JSON      bool   `long:"json" description:"Print output in JSON format"`
 }
 
-type JSONEnvInfo struct {
-	Languages []*envinfo.Item `json:"Languages,omitempty"`
-	Binaries  []*envinfo.Item `json:"Binaries,omitempty"`
-	System    *envinfo.System `json:"System,omitempty"`
-}
-
 func main() {
 	var opts = Options{}
 	_, err := flags.Parse(&opts)
@@ -72,7 +66,7 @@ func main() {
 	if opts.JSON {
 		encoder := json.NewEncoder(os.Stdout)
 		encoder.SetIndent("", "  ")
-		encoder.Encode((*JSONEnvInfo)(envInfo))
+		encoder.Encode(envInfo)
 		return
 	}
 	if opts.System {

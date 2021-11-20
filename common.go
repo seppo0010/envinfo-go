@@ -10,12 +10,6 @@ import (
 
 var versionRegex = regexp.MustCompile(`\d+\.[\d+|.]+`)
 
-type Item struct {
-	Name    string
-	Version string
-	Path    string
-}
-
 func GetItem(executable, name, flag string) (*Item, error) {
 	log.WithFields(log.Fields{
 		"executable": executable,

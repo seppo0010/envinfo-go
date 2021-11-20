@@ -9,9 +9,15 @@ type EnvInfoBuilder struct {
 }
 
 type EnvInfo struct {
-	Languages []*Item
-	Binaries  []*Item
-	System    *System
+	Languages []*Item `json:"Languages,omitempty"`
+	Binaries  []*Item `json:"Binaries,omitempty"`
+	System    *System `json:"System,omitempty"`
+}
+
+type Item struct {
+	Name    string `json:"-"`
+	Version string `json:"version"`
+	Path    string `json:"path"`
 }
 
 func NewEnvInfoBuilder() *EnvInfoBuilder {
