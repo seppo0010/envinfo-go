@@ -19,3 +19,8 @@ func GetBraveVersion() (*Item, error) {
 	name := "Brave Browser"
 	return getApplication(name, browserBundleIdentifiers[name])
 }
+
+func GetChromeVersion() (*Item, error) {
+	name := "Chrome"
+	return getApplication(name, browserBundleIdentifiers[name])
+}

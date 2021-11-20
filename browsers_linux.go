@@ -10,3 +10,7 @@ func GetBraveVersion() (*Item, error) {
 	}
 	return GetItem("brave-browser", "Brave Browser", "--version")
 }
+
+func GetChromeVersion() (*Item, error) {
+	return GetItem("google-chrome", "Chrome", "--version")
+}
