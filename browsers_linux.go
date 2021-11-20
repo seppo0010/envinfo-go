@@ -14,3 +14,11 @@ func GetBraveVersion() (*Item, error) {
 func GetChromeVersion() (*Item, error) {
 	return GetItem("google-chrome", "Chrome", "--version")
 }
+
+func GetChromeCanaryVersion() (*Item, error) {
+	return &Item{
+		Name:    "Google Chrome Canary",
+		Path:    "",
+		Version: "",
+	}, nil
+}

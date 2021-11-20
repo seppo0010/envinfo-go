@@ -24,3 +24,8 @@ func GetChromeVersion() (*Item, error) {
 	name := "Chrome"
 	return getApplication(name, browserBundleIdentifiers[name])
 }
+
+func GetChromeCanaryVersion() (*Item, error) {
+	name := "Chrome Canary"
+	return getApplication(name, browserBundleIdentifiers[name])
+}
