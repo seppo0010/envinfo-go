@@ -24,6 +24,7 @@ func GetLanguages() []*Item {
 		GetRVersion,
 		GetRubyVersion,
 		GetRustVersion,
+		GetScalaVersion,
 	})
 }
 
@@ -106,4 +107,8 @@ func GetRubyVersion() (*Item, error) {
 
 func GetRustVersion() (*Item, error) {
 	return GetItem("rustc", "Rust", "--version")
+}
+
+func GetScalaVersion() (*Item, error) {
+	return GetItem("scalac", "Scala", "-version")
 }
