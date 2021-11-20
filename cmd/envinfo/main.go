@@ -15,17 +15,53 @@ type Options struct {
 	Verbose []bool `short:"v" long:"verbose" description:"Show verbose debug information"`
 }
 
-type EnvInfo struct {
-	Languages []*envinfo.Item
-	Binaries  []*envinfo.Item
-	System    *envinfo.System
+func main() {
+	var opts = Options{}
+	_, err := flags.Parse(&opts)
+
+	if flags.WroteHelp(err) {
+		return
+	}
+
+	if err != nil {
+		os.Exit(1)
+		return
+	}
+
+	log.SetFormatter(&log.TextFormatter{})
+	log.SetOutput(os.Stderr)
+	if len(opts.Verbose) > 3 {
+		log.SetLevel(log.DebugLevel)
+	} else if len(opts.Verbose) > 2 {
+		log.SetLevel(log.InfoLevel)
+	} else if len(opts.Verbose) > 1 {
+		log.SetLevel(log.WarnLevel)
+	} else {
+		log.SetLevel(log.ErrorLevel)
+	}
+
+	envInfo := envinfo.NewEnvInfo()
+	PrintCLI("System", SystemToItems(envInfo.System), os.Stdout)
+	PrintCLI("Languages", envInfo.Languages, os.Stdout)
+	PrintCLI("Binaries", envInfo.Binaries, os.Stdout)
 }
 
-func NewEnvInfo() *EnvInfo {
-	return &EnvInfo{
-		Languages: []*envinfo.Item{},
-		Binaries:  []*envinfo.Item{},
+func PrintCLI(title string, item []*envinfo.Item, w io.Writer) {
+	io.WriteString(w, "  ")
+	io.WriteString(w, chalk.Underline.TextStyle(title))
+	io.WriteString(w, "\n")
+	for _, item := range item {
+		io.WriteString(w, "    ")
+		io.WriteString(w, item.Name)
+		io.WriteString(w, ": ")
+		io.WriteString(w, item.Version)
+		if item.Path != "" {
+			io.WriteString(w, " - ")
+			io.WriteString(w, item.Path)
+		}
+		io.WriteString(w, "\n")
 	}
+	io.WriteString(w, "\n")
 }
 
 func SystemToItems(system *envinfo.System) []*envinfo.Item {
@@ -57,56 +93,4 @@ func SystemToItems(system *envinfo.System) []*envinfo.Item {
 		})
 	}
 	return items
-}
-
-func main() {
-	var opts = Options{}
-	_, err := flags.Parse(&opts)
-
-	if flags.WroteHelp(err) {
-		return
-	}
-
-	if err != nil {
-		os.Exit(1)
-		return
-	}
-
-	log.SetFormatter(&log.TextFormatter{})
-	log.SetOutput(os.Stderr)
-	if len(opts.Verbose) > 3 {
-		log.SetLevel(log.DebugLevel)
-	} else if len(opts.Verbose) > 2 {
-		log.SetLevel(log.InfoLevel)
-	} else if len(opts.Verbose) > 1 {
-		log.SetLevel(log.WarnLevel)
-	} else {
-		log.SetLevel(log.ErrorLevel)
-	}
-
-	envInfo := NewEnvInfo()
-	envInfo.Languages = envinfo.GetLanguages()
-	envInfo.Binaries = envinfo.GetBinaries()
-	envInfo.System = envinfo.GetSystem()
-	PrintCLI("System", SystemToItems(envInfo.System), os.Stdout)
-	PrintCLI("Languages", envInfo.Languages, os.Stdout)
-	PrintCLI("Binaries", envInfo.Binaries, os.Stdout)
-}
-
-func PrintCLI(title string, item []*envinfo.Item, w io.Writer) {
-	io.WriteString(w, "  ")
-	io.WriteString(w, chalk.Underline.TextStyle(title))
-	io.WriteString(w, "\n")
-	for _, item := range item {
-		io.WriteString(w, "    ")
-		io.WriteString(w, item.Name)
-		io.WriteString(w, ": ")
-		io.WriteString(w, item.Version)
-		if item.Path != "" {
-			io.WriteString(w, " - ")
-			io.WriteString(w, item.Path)
-		}
-		io.WriteString(w, "\n")
-	}
-	io.WriteString(w, "\n")
 }
