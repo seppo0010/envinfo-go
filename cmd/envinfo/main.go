@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"io"
 	"os"
 
@@ -16,6 +17,13 @@ type Options struct {
 	System    bool   `long:"system" description:"Print general system info such as OS, CPU, Memory and Shell"`
 	Languages bool   `long:"languages" description:"Get version numbers of installed languages such as Java, Python, PHP, etc"`
 	Binaries  bool   `long:"binaries" description:"Get version numbers of node, npm, watchman, etc"`
+	JSON      bool   `long:"json" description:"Print output in JSON format"`
+}
+
+type JSONEnvInfo struct {
+	Languages []*envinfo.Item `json:"Languages,omitempty"`
+	Binaries  []*envinfo.Item `json:"Binaries,omitempty"`
+	System    *envinfo.System `json:"System,omitempty"`
 }
 
 func main() {
@@ -61,6 +69,12 @@ func main() {
 	}
 	envInfo := builder.Build()
 
+	if opts.JSON {
+		encoder := json.NewEncoder(os.Stdout)
+		encoder.SetIndent("", "  ")
+		encoder.Encode((*JSONEnvInfo)(envInfo))
+		return
+	}
 	if opts.System {
 		PrintCLI("System", SystemToItems(envInfo.System), os.Stdout)
 	}
