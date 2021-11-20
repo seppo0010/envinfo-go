@@ -1,15 +1,19 @@
 package main
 
 import (
-	"flag"
 	"io"
 	"os"
 
+	"github.com/jessevdk/go-flags"
 	log "github.com/sirupsen/logrus"
 	"github.com/ttacon/chalk"
 
 	"github.com/seppo0010/envinfo-go"
 )
+
+type Options struct {
+	Verbose []bool `short:"v" long:"verbose" description:"Show verbose debug information"`
+}
 
 type EnvInfo struct {
 	Languages []*envinfo.Item
@@ -56,13 +60,28 @@ func SystemToItems(system *envinfo.System) []*envinfo.Item {
 }
 
 func main() {
-	verbose := flag.Bool("v", false, "show debug logs")
-	flag.Parse()
+	var opts = Options{}
+	_, err := flags.Parse(&opts)
 
-	if *verbose {
-		log.SetFormatter(&log.TextFormatter{})
-		log.SetOutput(os.Stderr)
+	if flags.WroteHelp(err) {
+		return
+	}
+
+	if err != nil {
+		os.Exit(1)
+		return
+	}
+
+	log.SetFormatter(&log.TextFormatter{})
+	log.SetOutput(os.Stderr)
+	if len(opts.Verbose) > 3 {
 		log.SetLevel(log.DebugLevel)
+	} else if len(opts.Verbose) > 2 {
+		log.SetLevel(log.InfoLevel)
+	} else if len(opts.Verbose) > 1 {
+		log.SetLevel(log.WarnLevel)
+	} else {
+		log.SetLevel(log.ErrorLevel)
 	}
 
 	envInfo := NewEnvInfo()

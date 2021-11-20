@@ -10,6 +10,7 @@ require (
 	github.com/acobaugh/osrelease v0.0.0-20181218015638-a93a0a55a249 // indirect
 	github.com/cobaugh/osrelease v0.0.0-20211111170140-20e410975bc3 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
+	github.com/jessevdk/go-flags v1.5.0 // indirect
 	github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 // indirect
 	github.com/pbnjay/memory v0.0.0-20210728143218-7b4eea64cf58 // indirect
 	github.com/shirou/gopsutil v3.21.10+incompatible // indirect
