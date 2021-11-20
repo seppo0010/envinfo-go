@@ -3,7 +3,7 @@ package envinfo
 import "sync"
 
 func GetBinaries() []*Item {
-	funcs := []func() (*Item, error){GetNodeVersion, GetNpmVersion, GetYarnVersion}
+	funcs := []func() (*Item, error){GetNodeVersion, GetNpmVersion, GetYarnVersion, GetWatchmanVersion}
 	results := make(chan (*Item), len(funcs))
 	var wg sync.WaitGroup
 	for _, f := range funcs {
@@ -37,4 +37,8 @@ func GetNpmVersion() (*Item, error) {
 
 func GetYarnVersion() (*Item, error) {
 	return GetItem("yarn", "Yarn", "--version")
+}
+
+func GetWatchmanVersion() (*Item, error) {
+	return GetItem("watchman", "Watchman", "--version")
 }
