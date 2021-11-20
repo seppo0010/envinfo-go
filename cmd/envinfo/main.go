@@ -26,7 +26,7 @@ func SystemToItems(system *envinfo.System) []*envinfo.Item {
 	if system == nil {
 		return []*envinfo.Item{}
 	}
-	return []*envinfo.Item{
+	items := []*envinfo.Item{
 		&envinfo.Item{
 			Name:    "OS",
 			Version: system.OS,
@@ -44,6 +44,13 @@ func SystemToItems(system *envinfo.System) []*envinfo.Item {
 			Version: system.Shell,
 		},
 	}
+	if system.Container != "" {
+		items = append(items, &envinfo.Item{
+			Name:    "Container",
+			Version: system.Container,
+		})
+	}
+	return items
 }
 
 func main() {

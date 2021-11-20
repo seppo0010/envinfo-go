@@ -11,10 +11,11 @@ import (
 )
 
 type System struct {
-	OS     string
-	CPU    string
-	Memory string
-	Shell  string
+	OS        string
+	CPU       string
+	Memory    string
+	Shell     string
+	Container string
 }
 
 func getCPU() string {
@@ -41,11 +42,22 @@ func getShell() string {
 	return fmt.Sprintf("%s - %s", item.Version, item.Path)
 }
 
+func getContainer() string {
+	if _, err := os.Stat("/.dockerenv"); err == nil {
+		return "Yes"
+	}
+	if _, err := os.Stat("/proc/self/cgroup"); err == nil {
+		return "Yes"
+	}
+	return ""
+}
+
 func GetSystem() *System {
 	return &System{
-		OS:     getOS(),
-		CPU:    getCPU(),
-		Memory: getMemory(),
-		Shell:  getShell(),
+		OS:        getOS(),
+		CPU:       getCPU(),
+		Memory:    getMemory(),
+		Shell:     getShell(),
+		Container: getContainer(),
 	}
 }
