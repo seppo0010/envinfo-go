@@ -4,15 +4,14 @@ import (
 	"os/exec"
 	"regexp"
 	"strings"
-    "sync"
-
+	"sync"
 
 	log "github.com/sirupsen/logrus"
 )
 
 var versionRegex = regexp.MustCompile(`\d+\.[\d+|.]+`)
 
-func GetItem(executable, name, flag string) (*Item, error) {
+func GetItemRegex(executable, name, flag string, regex *regexp.Regexp) (*Item, error) {
 	log.WithFields(log.Fields{
 		"executable": executable,
 		"name":       name,
@@ -32,9 +31,12 @@ func GetItem(executable, name, flag string) (*Item, error) {
 	stdout, _ := cmd.Output()
 	return &Item{
 		Name:    name,
-		Version: strings.TrimSpace(versionRegex.FindString(string(stdout))),
+		Version: strings.TrimSpace(regex.FindString(string(stdout))),
 		Path:    string(which),
 	}, nil
+}
+func GetItem(executable, name, flag string) (*Item, error) {
+	return GetItemRegex(executable, name, flag, versionRegex)
 }
 
 func getItems(funcs []func() (*Item, error)) []*Item {
@@ -60,4 +62,3 @@ func getItems(funcs []func() (*Item, error)) []*Item {
 
 	return items
 }
-

@@ -1,7 +1,9 @@
 package envinfo
 
+import "regexp"
+
 func GetLanguages() []*Item {
-	return getItems([]func() (*Item, error){GetNodeVersion, GetBashVersion})
+	return getItems([]func() (*Item, error){GetGoVersion, GetNodeVersion, GetBashVersion, GetElixirVersion})
 }
 
 func GetNodeVersion() (*Item, error) {
@@ -10,4 +12,14 @@ func GetNodeVersion() (*Item, error) {
 
 func GetBashVersion() (*Item, error) {
 	return GetItem("bash", "Bash", "--version")
+}
+
+func GetElixirVersion() (*Item, error) {
+	versionRegex := regexp.MustCompile(`[Elixir]+\s[\d+.[\d+|.]+`)
+	item, err := GetItemRegex("elixir", "Elixir", "--version", versionRegex)
+	if err != nil {
+		return nil, err
+	}
+	item.Version = item.Version[7:]
+	return item, nil
 }
