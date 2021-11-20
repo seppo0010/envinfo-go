@@ -2,6 +2,7 @@ package envinfo
 
 import (
 	"fmt"
+	"os"
 	"runtime"
 
 	"code.cloudfoundry.org/bytefmt"
@@ -28,10 +29,23 @@ func getMemory() string {
 	return fmt.Sprintf("%s / %s", bytefmt.ByteSize(memory.FreeMemory()), bytefmt.ByteSize(memory.TotalMemory()))
 }
 
+func getShell() string {
+	shell := os.Getenv("SHELL")
+	if shell == "" {
+		return "N/A"
+	}
+	item, err := GetItem(shell, shell, "--version")
+	if err != nil {
+		return "Unknown"
+	}
+	return fmt.Sprintf("%s - %s", item.Version, item.Path)
+}
+
 func GetSystem() *System {
 	return &System{
 		OS:     getOS(),
 		CPU:    getCPU(),
 		Memory: getMemory(),
+		Shell:  getShell(),
 	}
 }

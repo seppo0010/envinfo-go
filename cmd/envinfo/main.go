@@ -39,6 +39,10 @@ func SystemToItems(system *envinfo.System) []*envinfo.Item {
 			Name:    "Memory",
 			Version: system.Memory,
 		},
+		&envinfo.Item{
+			Name:    "Shell",
+			Version: system.Shell,
+		},
 	}
 }
 
