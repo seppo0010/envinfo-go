@@ -21,6 +21,7 @@ func GetLanguages() []*Item {
 		GetProtocVersion,
 		GetPythonVersion,
 		GetPython3Version,
+		GetRVersion,
 	})
 }
 
@@ -91,4 +92,8 @@ func GetPythonVersion() (*Item, error) {
 
 func GetPython3Version() (*Item, error) {
 	return GetItem("python3", "Python3", "--version")
+}
+
+func GetRVersion() (*Item, error) {
+	return GetItem("R", "R", "--version")
 }
