@@ -17,6 +17,7 @@ type Options struct {
 	System    bool   `long:"system" description:"Print general system info such as OS, CPU, Memory and Shell"`
 	Languages bool   `long:"languages" description:"Get version numbers of installed languages such as Java, Python, PHP, etc"`
 	Binaries  bool   `long:"binaries" description:"Get version numbers of node, npm, watchman, etc"`
+	Browsers  bool   `long:"browsers" description:"Get version numbers of installed web browsers"`
 	JSON      bool   `long:"json" description:"Print output in JSON format"`
 }
 
@@ -45,10 +46,11 @@ func main() {
 		log.SetLevel(log.ErrorLevel)
 	}
 
-	if !opts.System && !opts.Languages && !opts.Binaries {
+	if !opts.System && !opts.Languages && !opts.Binaries && !opts.Browsers {
 		opts.System = true
 		opts.Languages = true
 		opts.Binaries = true
+		opts.Browsers = true
 	}
 
 	builder := envinfo.NewEnvInfoBuilder()
@@ -60,6 +62,9 @@ func main() {
 	}
 	if opts.Binaries {
 		builder.Binaries()
+	}
+	if opts.Browsers {
+		builder.Browsers()
 	}
 	envInfo := builder.Build()
 
@@ -77,6 +82,9 @@ func main() {
 	}
 	if opts.Binaries {
 		PrintCLI("Binaries", envInfo.Binaries, os.Stdout)
+	}
+	if opts.Browsers {
+		PrintCLI("Browsers", envInfo.Browsers, os.Stdout)
 	}
 }
 

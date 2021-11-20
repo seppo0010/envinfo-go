@@ -7,6 +7,7 @@ for t in $tests; do
 	pushd "./$t"
 	expected_value=$(cat expected) || expected_value=$(basename $t)
 	name=$(cat search) || name=$(basename $(dirname $t))
+	name=${name/_/ }
 	docker build -t envinfo/test .
 	out="$(docker run envinfo/test 2>&1)"
 	value=$(echo -n "$out" |grep -w " $name:" |cut -d ':' -f 2)

@@ -92,6 +92,7 @@ func (b *GetItemBuilder) Get() (*Item, error) {
 func GetItemRegex(executable, name, flag string, regex *regexp.Regexp) (*Item, error) {
 	return NewGetItemBuilder(executable, name, flag).Regex(regex).Get()
 }
+
 func GetItem(executable, name, flag string) (*Item, error) {
 	return NewGetItemBuilder(executable, name, flag).Get()
 }
