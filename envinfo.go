@@ -1,5 +1,7 @@
 package envinfo
 
+import "sync"
+
 type EnvInfo struct {
 	Languages []*Item
 	Binaries  []*Item
@@ -8,8 +10,22 @@ type EnvInfo struct {
 
 func NewEnvInfo() *EnvInfo {
 	envinfo := &EnvInfo{}
-	envinfo.Languages = GetLanguages()
-	envinfo.Binaries = GetBinaries()
-	envinfo.System = GetSystem()
+	var wg sync.WaitGroup
+	wg.Add(1)
+	func() {
+		defer wg.Done()
+		envinfo.Languages = GetLanguages()
+	}()
+	wg.Add(1)
+	func() {
+		defer wg.Done()
+		envinfo.Binaries = GetBinaries()
+	}()
+	wg.Add(1)
+	func() {
+		defer wg.Done()
+		envinfo.System = GetSystem()
+	}()
+	wg.Wait()
 	return envinfo
 }
