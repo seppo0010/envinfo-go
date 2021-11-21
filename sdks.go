@@ -70,7 +70,7 @@ func parseSDKManagerOutput(output string) *SDKManagerPackage {
 			continue
 		}
 		path := strings.Split(strings.TrimSpace(split[0]), ";")[0]
-		description := strings.Split(strings.TrimSpace(split[2]), " SystemImage")[0]
+		description := strings.Split(strings.TrimSpace(split[2]), " System Image")[0]
 		systemImages = append(systemImages, fmt.Sprintf("%s | %s", path, description))
 	}
 	return &SDKManagerPackage{
