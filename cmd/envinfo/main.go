@@ -193,6 +193,15 @@ func PrintSDKs(title string, sdks *envinfo.SDKs, w io.Writer, opts Options) {
 	io.WriteString(w, "  ")
 	io.WriteString(w, chalk.Underline.TextStyle("SDKs:"))
 	io.WriteString(w, "\n")
+	if sdks.IOS != nil {
+		io.WriteString(w, "    ")
+		io.WriteString(w, chalk.Underline.TextStyle("iOS SDK:"))
+		io.WriteString(w, "\n")
+		io.WriteString(w, "      ")
+		io.WriteString(w, "Platforms: ")
+		io.WriteString(w, strings.Join(sdks.IOS, ", "))
+		io.WriteString(w, "\n")
+	}
 	if sdks.Android != nil {
 		io.WriteString(w, "    ")
 		io.WriteString(w, chalk.Underline.TextStyle("Android SDK:"))

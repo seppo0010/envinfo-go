@@ -16,6 +16,7 @@ type EnvInfoBuilder struct {
 
 type SDKs struct {
 	Android *SDKManagerPackage
+	IOS     []string
 }
 type EnvInfo struct {
 	Languages      []*Item `json:"Languages,omitempty"`
@@ -114,6 +115,12 @@ func (b *EnvInfoBuilder) Build() *EnvInfo {
 		}()
 	}
 	if b.sdks {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			version, _ := GetIOSVersions()
+			envinfo.SDKs.IOS = version
+		}()
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
