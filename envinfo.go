@@ -11,6 +11,7 @@ type EnvInfoBuilder struct {
 	virtualization bool
 	servers        bool
 	sdks           bool
+	ides           bool
 	system         bool
 }
 
@@ -24,6 +25,7 @@ type EnvInfo struct {
 	Managers       []*Item `json:"Managers,omitempty"`
 	Browsers       []*Item `json:"Browsers,omitempty"`
 	Utilities      []*Item `json:"Utilities,omitempty"`
+	IDEs           []*Item `json:"IDEs,omitempty"`
 	Virtualization []*Item `json:"Virtualization,omitempty"`
 	Servers        []*Item `json:"Servers,omitempty"`
 	SDKs           *SDKs   `json:"SDKs,omitempty"`
@@ -70,6 +72,10 @@ func (b *EnvInfoBuilder) Servers() {
 
 func (b *EnvInfoBuilder) SDKs() {
 	b.sdks = true
+}
+
+func (b *EnvInfoBuilder) IDEs() {
+	b.ides = true
 }
 
 func (b *EnvInfoBuilder) Languages() {
@@ -126,6 +132,13 @@ func (b *EnvInfoBuilder) Build() *EnvInfo {
 			defer wg.Done()
 			version, _ := GetAndroidVersions()
 			envinfo.SDKs.Android = version
+		}()
+	}
+	if b.ides {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			envinfo.IDEs = GetIDEs()
 		}()
 	}
 	if b.managers {

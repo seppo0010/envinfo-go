@@ -24,6 +24,7 @@ type Options struct {
 	Virtualization bool   `long:"virtualization" description:"Get version numbers of installed virtualization tools"`
 	Servers        bool   `long:"servers" description:"Get version numbers of installed servers"`
 	SDKs           bool   `long:"sdks" description:"Get version numbers of installed sdks"`
+	IDEs           bool   `long:"ides" description:"Get version numbers of installed IDEs"`
 	JSON           bool   `long:"json" description:"Print output in JSON format"`
 	ShowNotFound   bool   `long:"showNotFound" description:"Don't filter out values marked 'Not Found'"`
 }
@@ -56,7 +57,7 @@ func main() {
 		log.SetLevel(log.ErrorLevel)
 	}
 
-	if !opts.System && !opts.Languages && !opts.Binaries && !opts.Browsers && !opts.Managers && !opts.Utilities && !opts.Servers && !opts.Virtualization && !opts.SDKs {
+	if !opts.System && !opts.Languages && !opts.Binaries && !opts.Browsers && !opts.Managers && !opts.Utilities && !opts.Servers && !opts.Virtualization && !opts.SDKs && !opts.IDEs {
 		opts.System = true
 		opts.Languages = true
 		opts.Binaries = true
@@ -66,6 +67,7 @@ func main() {
 		opts.Servers = true
 		opts.Virtualization = true
 		opts.SDKs = true
+		opts.IDEs = true
 	}
 
 	builder := envinfo.NewEnvInfoBuilder()
@@ -95,6 +97,9 @@ func main() {
 	}
 	if opts.SDKs {
 		builder.SDKs()
+	}
+	if opts.IDEs {
+		builder.IDEs()
 	}
 	envInfo := builder.Build()
 
@@ -130,6 +135,9 @@ func main() {
 	}
 	if opts.SDKs {
 		PrintSDKs("SDKs", envInfo.SDKs, os.Stdout, opts)
+	}
+	if opts.IDEs {
+		PrintCLI("IDEs", envInfo.IDEs, os.Stdout, opts)
 	}
 }
 
