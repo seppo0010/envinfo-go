@@ -23,11 +23,11 @@ type GetItemBuilder struct {
 	stderr     bool
 }
 
-func NewGetItemBuilder(executable, name, flag string) *GetItemBuilder {
+func NewGetItemBuilder(executable, name string) *GetItemBuilder {
 	return &GetItemBuilder{
 		executable: executable,
 		name:       name,
-		flag:       flag,
+		flag:       "--version",
 		regex:      versionRegex,
 		stdout:     true,
 	}
@@ -45,6 +45,11 @@ func (b *GetItemBuilder) NoStdout() *GetItemBuilder {
 
 func (b *GetItemBuilder) Stderr() *GetItemBuilder {
 	b.stderr = true
+	return b
+}
+
+func (b *GetItemBuilder) Flag(flag string) *GetItemBuilder {
+	b.flag = flag
 	return b
 }
 
@@ -100,12 +105,8 @@ func (b *GetItemBuilder) Get() (*Item, error) {
 	}, nil
 }
 
-func GetItemRegex(executable, name, flag string, regex *regexp.Regexp) (*Item, error) {
-	return NewGetItemBuilder(executable, name, flag).Regex(regex).Get()
-}
-
-func GetItem(executable, name, flag string) (*Item, error) {
-	return NewGetItemBuilder(executable, name, flag).Get()
+func GetItem(executable, name string) (*Item, error) {
+	return NewGetItemBuilder(executable, name).Flag("--version").Get()
 }
 
 type ByName []*Item

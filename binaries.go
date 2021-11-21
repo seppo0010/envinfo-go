@@ -5,17 +5,17 @@ func GetBinaries() []*Item {
 }
 
 func GetGoVersion() (*Item, error) {
-	return GetItem("go", "Go", "version")
+	return NewGetItemBuilder("go", "Go").Flag("version").Get()
 }
 
 func GetNpmVersion() (*Item, error) {
-	return GetItem("npm", "npm", "--version")
+	return GetItem("npm", "npm")
 }
 
 func GetYarnVersion() (*Item, error) {
-	return GetItem("yarn", "Yarn", "--version")
+	return GetItem("yarn", "Yarn")
 }
 
 func GetWatchmanVersion() (*Item, error) {
-	return GetItem("watchman", "Watchman", "--version")
+	return GetItem("watchman", "Watchman")
 }

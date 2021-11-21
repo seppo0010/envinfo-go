@@ -4,15 +4,15 @@
 package envinfo
 
 func GetBraveVersion() (*Item, error) {
-	item, _ := GetItem("brave", "Brave Browser", "--version")
+	item, _ := GetItem("brave", "Brave Browser")
 	if item.Version != "" {
 		return item, nil
 	}
-	return GetItem("brave-browser", "Brave Browser", "--version")
+	return GetItem("brave-browser", "Brave Browser")
 }
 
 func GetChromeVersion() (*Item, error) {
-	return GetItem("google-chrome", "Chrome", "--version")
+	return GetItem("google-chrome", "Chrome")
 }
 
 func GetChromeCanaryVersion() (*Item, error) {
@@ -24,7 +24,7 @@ func GetChromeCanaryVersion() (*Item, error) {
 }
 
 func GetChromiumVersion() (*Item, error) {
-	return GetItem("chromium", "Chromium", "--version")
+	return GetItem("chromium", "Chromium")
 }
 
 func GetEdgeVersion() (*Item, error) {
@@ -36,11 +36,11 @@ func GetEdgeVersion() (*Item, error) {
 }
 
 func GetFirefoxVersion() (*Item, error) {
-	return GetItem("firefox", "Firefox", "--version")
+	return GetItem("firefox", "Firefox")
 }
 
 func GetFirefoxNightlyVersion() (*Item, error) {
-	return GetItem("firefox-trunk", "Firefox Nightly", "--version")
+	return GetItem("firefox-trunk", "Firefox Nightly")
 }
 
 func GetFirefoxDeveloperEditionVersion() (*Item, error) {

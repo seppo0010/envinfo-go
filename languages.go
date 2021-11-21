@@ -29,16 +29,16 @@ func GetLanguages() []*Item {
 }
 
 func GetNodeVersion() (*Item, error) {
-	return GetItem("node", "Node", "--version")
+	return GetItem("node", "Node")
 }
 
 func GetBashVersion() (*Item, error) {
-	return GetItem("bash", "Bash", "--version")
+	return GetItem("bash", "Bash")
 }
 
 func GetElixirVersion() (*Item, error) {
 	versionRegex := regexp.MustCompile(`[Elixir]+\s[\d+.[\d+|.]+`)
-	item, err := GetItemRegex("elixir", "Elixir", "--version", versionRegex)
+	item, err := NewGetItemBuilder("elixir", "Elixir").Regex(versionRegex).Get()
 	if err != nil {
 		return nil, err
 	}
@@ -73,44 +73,42 @@ func GetErlangVersion() (*Item, error) {
 }
 
 func GetJavaVersion() (*Item, error) {
-	versionRegex := regexp.MustCompile(`\d+\.?[\w+|.|_|-]+`)
-	executable, name, flag, regex := "javac", "Java", "-version", versionRegex
-	return NewGetItemBuilder(executable, name, flag).Regex(regex).Stderr().Get()
+	regex := regexp.MustCompile(`\d+\.?[\w+|.|_|-]+`)
+	return NewGetItemBuilder("javac", "Java").Flag("-version").Regex(regex).Stderr().Get()
 }
 
 func GetPerlVersion() (*Item, error) {
-	return GetItem("perl", "Perl", "--version")
+	return GetItem("perl", "Perl")
 }
 
 func GetPHPVersion() (*Item, error) {
-	return GetItem("php", "PHP", "--version")
+	return GetItem("php", "PHP")
 }
 
 func GetProtocVersion() (*Item, error) {
-	return GetItem("protoc", "Protoc", "--version")
+	return GetItem("protoc", "Protoc")
 }
 
 func GetPythonVersion() (*Item, error) {
-	executable, name, flag := "python", "Python", "--version"
-	return NewGetItemBuilder(executable, name, flag).Stderr().NoStdout().Get()
+	return NewGetItemBuilder("python", "Python").Stderr().NoStdout().Get()
 }
 
 func GetPython3Version() (*Item, error) {
-	return GetItem("python3", "Python3", "--version")
+	return GetItem("python3", "Python3")
 }
 
 func GetRVersion() (*Item, error) {
-	return GetItem("R", "R", "--version")
+	return GetItem("R", "R")
 }
 
 func GetRubyVersion() (*Item, error) {
-	return GetItem("ruby", "Ruby", "--version")
+	return GetItem("ruby", "Ruby")
 }
 
 func GetRustVersion() (*Item, error) {
-	return GetItem("rustc", "Rust", "--version")
+	return GetItem("rustc", "Rust")
 }
 
 func GetScalaVersion() (*Item, error) {
-	return GetItem("scalac", "Scala", "-version")
+	return GetItem("scalac", "Scala")
 }

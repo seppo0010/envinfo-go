@@ -40,7 +40,7 @@ func getShell() string {
 		log.WithFields(log.Fields{}).Warn("unknown shell")
 		return "N/A"
 	}
-	item, err := GetItem(shell, shell, "--version")
+	item, err := GetItem(shell, shell)
 	if err != nil {
 		return "Unknown"
 	}

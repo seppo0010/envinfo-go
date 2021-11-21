@@ -8,10 +8,9 @@ func GetServers() []*Item {
 }
 
 func GetApacheVersion() (*Item, error) {
-	return GetItem("apachectl", "Apache", "-v")
+	return NewGetItemBuilder("apachectl", "Apache").Flag("-v").Get()
 }
 
 func GetNginxVersion() (*Item, error) {
-	executable, name, flag := "nginx", "Nginx", "-v"
-	return NewGetItemBuilder(executable, name, flag).Stderr().Get()
+	return NewGetItemBuilder("nginx", "Nginx").Flag("-v").Stderr().Get()
 }

@@ -16,41 +16,41 @@ func GetUtilities() []*Item {
 }
 
 func GetBazelVersion() (*Item, error) {
-	return GetItem("bazel", "Bazel", "--version")
+	return GetItem("bazel", "Bazel")
 }
 
 func GetCMakeVersion() (*Item, error) {
-	return GetItem("cmake", "CMake", "--version")
+	return GetItem("cmake", "CMake")
 }
 
 func GetGCCVersion() (*Item, error) {
-	return GetItem("gcc", "GCC", "--version")
+	return GetItem("gcc", "GCC")
 }
 
 func GetClangVersion() (*Item, error) {
-	return GetItem("clang", "Clang", "--version")
+	return GetItem("clang", "Clang")
 }
 
 func GetGitVersion() (*Item, error) {
-	return GetItem("git", "Git", "--version")
+	return GetItem("git", "Git")
 }
 
 func GetMakeVersion() (*Item, error) {
-	return GetItem("make", "Make", "--version")
+	return GetItem("make", "Make")
 }
 
 func GetNinjaVersion() (*Item, error) {
-	return GetItem("ninja", "Ninja", "--version")
+	return GetItem("ninja", "Ninja")
 }
 
 func GetMercurialVersion() (*Item, error) {
-	return GetItem("hg", "Mercurial", "--version")
+	return GetItem("hg", "Mercurial")
 }
 
 func GetSubversionVersion() (*Item, error) {
-	return GetItem("svn", "Subversion", "--version")
+	return GetItem("svn", "Subversion")
 }
 
 func GetFFmpegVersion() (*Item, error) {
-	return GetItem("ffmpeg", "FFmpeg", "-version")
+	return GetItem("ffmpeg", "FFmpeg")
 }
