@@ -10,9 +10,13 @@ type EnvInfoBuilder struct {
 	utilities      bool
 	virtualization bool
 	servers        bool
+	sdks           bool
 	system         bool
 }
 
+type SDKs struct {
+	Android *SDKManagerPackage
+}
 type EnvInfo struct {
 	Languages      []*Item `json:"Languages,omitempty"`
 	Binaries       []*Item `json:"Binaries,omitempty"`
@@ -21,6 +25,7 @@ type EnvInfo struct {
 	Utilities      []*Item `json:"Utilities,omitempty"`
 	Virtualization []*Item `json:"Virtualization,omitempty"`
 	Servers        []*Item `json:"Servers,omitempty"`
+	SDKs           *SDKs   `json:"SDKs,omitempty"`
 	System         *System `json:"System,omitempty"`
 }
 
@@ -62,12 +67,16 @@ func (b *EnvInfoBuilder) Servers() {
 	b.servers = true
 }
 
+func (b *EnvInfoBuilder) SDKs() {
+	b.sdks = true
+}
+
 func (b *EnvInfoBuilder) Languages() {
 	b.languages = true
 }
 
 func (b *EnvInfoBuilder) Build() *EnvInfo {
-	envinfo := &EnvInfo{}
+	envinfo := &EnvInfo{SDKs: &SDKs{}}
 	var wg sync.WaitGroup
 	if b.languages {
 		wg.Add(1)
@@ -102,6 +111,14 @@ func (b *EnvInfoBuilder) Build() *EnvInfo {
 		go func() {
 			defer wg.Done()
 			envinfo.Servers = GetServers()
+		}()
+	}
+	if b.sdks {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			version, _ := GetAndroidVersions()
+			envinfo.SDKs.Android = version
 		}()
 	}
 	if b.managers {

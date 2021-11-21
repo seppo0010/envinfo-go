@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io"
 	"os"
+	"strings"
 
 	"github.com/jessevdk/go-flags"
 	log "github.com/sirupsen/logrus"
@@ -22,6 +23,7 @@ type Options struct {
 	Utilities      bool   `long:"utilities" description:"Get version numbers of installed utilities"`
 	Virtualization bool   `long:"virtualization" description:"Get version numbers of installed virtualization tools"`
 	Servers        bool   `long:"servers" description:"Get version numbers of installed servers"`
+	SDKs           bool   `long:"sdks" description:"Get version numbers of installed sdks"`
 	JSON           bool   `long:"json" description:"Print output in JSON format"`
 	ShowNotFound   bool   `long:"showNotFound" description:"Don't filter out values marked 'Not Found'"`
 }
@@ -54,7 +56,7 @@ func main() {
 		log.SetLevel(log.ErrorLevel)
 	}
 
-	if !opts.System && !opts.Languages && !opts.Binaries && !opts.Browsers && !opts.Managers && !opts.Utilities && !opts.Servers && !opts.Virtualization {
+	if !opts.System && !opts.Languages && !opts.Binaries && !opts.Browsers && !opts.Managers && !opts.Utilities && !opts.Servers && !opts.Virtualization && !opts.SDKs {
 		opts.System = true
 		opts.Languages = true
 		opts.Binaries = true
@@ -63,6 +65,7 @@ func main() {
 		opts.Utilities = true
 		opts.Servers = true
 		opts.Virtualization = true
+		opts.SDKs = true
 	}
 
 	builder := envinfo.NewEnvInfoBuilder()
@@ -89,6 +92,9 @@ func main() {
 	}
 	if opts.Servers {
 		builder.Servers()
+	}
+	if opts.SDKs {
+		builder.SDKs()
 	}
 	envInfo := builder.Build()
 
@@ -121,6 +127,9 @@ func main() {
 	}
 	if opts.Servers {
 		PrintCLI("Servers", envInfo.Servers, os.Stdout, opts)
+	}
+	if opts.SDKs {
+		PrintSDKs("SDKs", envInfo.SDKs, os.Stdout, opts)
 	}
 }
 
@@ -178,4 +187,28 @@ func SystemToItems(system *envinfo.System) []*envinfo.Item {
 		})
 	}
 	return items
+}
+
+func PrintSDKs(title string, sdks *envinfo.SDKs, w io.Writer, opts Options) {
+	io.WriteString(w, "  ")
+	io.WriteString(w, chalk.Underline.TextStyle("SDKs:"))
+	io.WriteString(w, "\n")
+	if sdks.Android != nil {
+		io.WriteString(w, "    ")
+		io.WriteString(w, chalk.Underline.TextStyle("Android SDK:"))
+		io.WriteString(w, "\n")
+		io.WriteString(w, "      ")
+		io.WriteString(w, "API Levels: ")
+		io.WriteString(w, strings.Join(sdks.Android.APILevels, ", "))
+		io.WriteString(w, "\n")
+		io.WriteString(w, "      ")
+		io.WriteString(w, "Build Tools: ")
+		io.WriteString(w, strings.Join(sdks.Android.BuildTools, ", "))
+		io.WriteString(w, "\n")
+		io.WriteString(w, "      ")
+		io.WriteString(w, "System Images: ")
+		io.WriteString(w, strings.Join(sdks.Android.SystemImages, ", "))
+		io.WriteString(w, "\n")
+	}
+	io.WriteString(w, "\n")
 }
