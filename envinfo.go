@@ -5,6 +5,7 @@ import "sync"
 type EnvInfoBuilder struct {
 	languages bool
 	binaries  bool
+	managers  bool
 	browsers  bool
 	system    bool
 }
@@ -12,6 +13,7 @@ type EnvInfoBuilder struct {
 type EnvInfo struct {
 	Languages []*Item `json:"Languages,omitempty"`
 	Binaries  []*Item `json:"Binaries,omitempty"`
+	Managers  []*Item `json:"Managers,omitempty"`
 	Browsers  []*Item `json:"Browsers,omitempty"`
 	System    *System `json:"System,omitempty"`
 }
@@ -32,6 +34,10 @@ func (b *EnvInfoBuilder) System() {
 
 func (b *EnvInfoBuilder) Binaries() {
 	b.binaries = true
+}
+
+func (b *EnvInfoBuilder) Managers() {
+	b.managers = true
 }
 
 func (b *EnvInfoBuilder) Browsers() {
@@ -57,6 +63,13 @@ func (b *EnvInfoBuilder) Build() *EnvInfo {
 		go func() {
 			defer wg.Done()
 			envinfo.Browsers = GetBrowsers()
+		}()
+	}
+	if b.managers {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			envinfo.Managers = GetManagers()
 		}()
 	}
 	if b.binaries {

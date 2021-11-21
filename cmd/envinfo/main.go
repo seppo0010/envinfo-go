@@ -18,6 +18,7 @@ type Options struct {
 	Languages    bool   `long:"languages" description:"Get version numbers of installed languages such as Java, Python, PHP, etc"`
 	Binaries     bool   `long:"binaries" description:"Get version numbers of node, npm, watchman, etc"`
 	Browsers     bool   `long:"browsers" description:"Get version numbers of installed web browsers"`
+	Managers     bool   `long:"managers" description:"Get version numbers of installed package/dependency managers"`
 	JSON         bool   `long:"json" description:"Print output in JSON format"`
 	ShowNotFound bool   `long:"showNotFound" description:"Don't filter out values marked 'Not Found'"`
 }
@@ -50,11 +51,12 @@ func main() {
 		log.SetLevel(log.ErrorLevel)
 	}
 
-	if !opts.System && !opts.Languages && !opts.Binaries && !opts.Browsers {
+	if !opts.System && !opts.Languages && !opts.Binaries && !opts.Browsers && !opts.Managers {
 		opts.System = true
 		opts.Languages = true
 		opts.Binaries = true
 		opts.Browsers = true
+		opts.Managers = true
 	}
 
 	builder := envinfo.NewEnvInfoBuilder()
@@ -66,6 +68,9 @@ func main() {
 	}
 	if opts.Binaries {
 		builder.Binaries()
+	}
+	if opts.Managers {
+		builder.Managers()
 	}
 	if opts.Browsers {
 		builder.Browsers()
@@ -86,6 +91,9 @@ func main() {
 	}
 	if opts.Binaries {
 		PrintCLI("Binaries", envInfo.Binaries, os.Stdout, opts)
+	}
+	if opts.Managers {
+		PrintCLI("Managers", envInfo.Managers, os.Stdout, opts)
 	}
 	if opts.Browsers {
 		PrintCLI("Browsers", envInfo.Browsers, os.Stdout, opts)
