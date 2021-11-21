@@ -62,7 +62,11 @@ func (b *GetItemBuilder) Get() (*Item, error) {
 		log.WithFields(log.Fields{
 			"name": b.name,
 		}).Warn("executable not found")
-		return nil, err
+		return &Item{
+			Name:    b.name,
+			Version: "",
+			Path:    "",
+		}, nil
 	}
 	which := strings.TrimSpace(string(whichBytes))
 	cmd := exec.Command(string(which), b.flag)

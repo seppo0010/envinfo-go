@@ -13,12 +13,13 @@ import (
 )
 
 type Options struct {
-	Verbose   []bool `short:"v" long:"verbose" description:"Show verbose debug information"`
-	System    bool   `long:"system" description:"Print general system info such as OS, CPU, Memory and Shell"`
-	Languages bool   `long:"languages" description:"Get version numbers of installed languages such as Java, Python, PHP, etc"`
-	Binaries  bool   `long:"binaries" description:"Get version numbers of node, npm, watchman, etc"`
-	Browsers  bool   `long:"browsers" description:"Get version numbers of installed web browsers"`
-	JSON      bool   `long:"json" description:"Print output in JSON format"`
+	Verbose      []bool `short:"v" long:"verbose" description:"Show verbose debug information"`
+	System       bool   `long:"system" description:"Print general system info such as OS, CPU, Memory and Shell"`
+	Languages    bool   `long:"languages" description:"Get version numbers of installed languages such as Java, Python, PHP, etc"`
+	Binaries     bool   `long:"binaries" description:"Get version numbers of node, npm, watchman, etc"`
+	Browsers     bool   `long:"browsers" description:"Get version numbers of installed web browsers"`
+	JSON         bool   `long:"json" description:"Print output in JSON format"`
+	ShowNotFound bool   `long:"showNotFound" description:"Don't filter out values marked 'Not Found'"`
 }
 
 func main() {
@@ -78,28 +79,35 @@ func main() {
 		return
 	}
 	if opts.System {
-		PrintCLI("System", SystemToItems(envInfo.System), os.Stdout)
+		PrintCLI("System", SystemToItems(envInfo.System), os.Stdout, opts)
 	}
 	if opts.Languages {
-		PrintCLI("Languages", envInfo.Languages, os.Stdout)
+		PrintCLI("Languages", envInfo.Languages, os.Stdout, opts)
 	}
 	if opts.Binaries {
-		PrintCLI("Binaries", envInfo.Binaries, os.Stdout)
+		PrintCLI("Binaries", envInfo.Binaries, os.Stdout, opts)
 	}
 	if opts.Browsers {
-		PrintCLI("Browsers", envInfo.Browsers, os.Stdout)
+		PrintCLI("Browsers", envInfo.Browsers, os.Stdout, opts)
 	}
 }
 
-func PrintCLI(title string, item []*envinfo.Item, w io.Writer) {
+func PrintCLI(title string, item []*envinfo.Item, w io.Writer, opts Options) {
 	io.WriteString(w, "  ")
 	io.WriteString(w, chalk.Underline.TextStyle(title))
 	io.WriteString(w, "\n")
 	for _, item := range item {
+		if item.Version == "" && !opts.ShowNotFound {
+			continue
+		}
 		io.WriteString(w, "    ")
 		io.WriteString(w, item.Name)
 		io.WriteString(w, ": ")
-		io.WriteString(w, item.Version)
+		if item.Version == "" {
+			io.WriteString(w, "Not Found")
+		} else {
+			io.WriteString(w, item.Version)
+		}
 		if item.Path != "" {
 			io.WriteString(w, " - ")
 			io.WriteString(w, item.Path)

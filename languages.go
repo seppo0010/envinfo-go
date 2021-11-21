@@ -42,7 +42,9 @@ func GetElixirVersion() (*Item, error) {
 	if err != nil {
 		return nil, err
 	}
-	item.Version = item.Version[7:]
+	if len(item.Version) > 7 {
+		item.Version = item.Version[7:]
+	}
 	return item, nil
 }
 
