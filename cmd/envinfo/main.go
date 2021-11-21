@@ -20,6 +20,7 @@ type Options struct {
 	Browsers     bool   `long:"browsers" description:"Get version numbers of installed web browsers"`
 	Managers     bool   `long:"managers" description:"Get version numbers of installed package/dependency managers"`
 	Utilities    bool   `long:"utilities" description:"Get version numbers of installed utilities"`
+	Servers      bool   `long:"servers" description:"Get version numbers of installed servers"`
 	JSON         bool   `long:"json" description:"Print output in JSON format"`
 	ShowNotFound bool   `long:"showNotFound" description:"Don't filter out values marked 'Not Found'"`
 }
@@ -52,13 +53,14 @@ func main() {
 		log.SetLevel(log.ErrorLevel)
 	}
 
-	if !opts.System && !opts.Languages && !opts.Binaries && !opts.Browsers && !opts.Managers && !opts.Utilities {
+	if !opts.System && !opts.Languages && !opts.Binaries && !opts.Browsers && !opts.Managers && !opts.Utilities && !opts.Servers {
 		opts.System = true
 		opts.Languages = true
 		opts.Binaries = true
 		opts.Browsers = true
 		opts.Managers = true
 		opts.Utilities = true
+		opts.Servers = true
 	}
 
 	builder := envinfo.NewEnvInfoBuilder()
@@ -79,6 +81,9 @@ func main() {
 	}
 	if opts.Utilities {
 		builder.Utilities()
+	}
+	if opts.Servers {
+		builder.Servers()
 	}
 	envInfo := builder.Build()
 
@@ -105,6 +110,9 @@ func main() {
 	}
 	if opts.Utilities {
 		PrintCLI("Utilities", envInfo.Utilities, os.Stdout, opts)
+	}
+	if opts.Servers {
+		PrintCLI("Servers", envInfo.Servers, os.Stdout, opts)
 	}
 }
 
