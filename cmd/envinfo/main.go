@@ -13,16 +13,17 @@ import (
 )
 
 type Options struct {
-	Verbose      []bool `short:"v" long:"verbose" description:"Show verbose debug information"`
-	System       bool   `long:"system" description:"Print general system info such as OS, CPU, Memory and Shell"`
-	Languages    bool   `long:"languages" description:"Get version numbers of installed languages such as Java, Python, PHP, etc"`
-	Binaries     bool   `long:"binaries" description:"Get version numbers of node, npm, watchman, etc"`
-	Browsers     bool   `long:"browsers" description:"Get version numbers of installed web browsers"`
-	Managers     bool   `long:"managers" description:"Get version numbers of installed package/dependency managers"`
-	Utilities    bool   `long:"utilities" description:"Get version numbers of installed utilities"`
-	Servers      bool   `long:"servers" description:"Get version numbers of installed servers"`
-	JSON         bool   `long:"json" description:"Print output in JSON format"`
-	ShowNotFound bool   `long:"showNotFound" description:"Don't filter out values marked 'Not Found'"`
+	Verbose        []bool `short:"v" long:"verbose" description:"Show verbose debug information"`
+	System         bool   `long:"system" description:"Print general system info such as OS, CPU, Memory and Shell"`
+	Languages      bool   `long:"languages" description:"Get version numbers of installed languages such as Java, Python, PHP, etc"`
+	Binaries       bool   `long:"binaries" description:"Get version numbers of node, npm, watchman, etc"`
+	Browsers       bool   `long:"browsers" description:"Get version numbers of installed web browsers"`
+	Managers       bool   `long:"managers" description:"Get version numbers of installed package/dependency managers"`
+	Utilities      bool   `long:"utilities" description:"Get version numbers of installed utilities"`
+	Virtualization bool   `long:"virtualization" description:"Get version numbers of installed virtualization tools"`
+	Servers        bool   `long:"servers" description:"Get version numbers of installed servers"`
+	JSON           bool   `long:"json" description:"Print output in JSON format"`
+	ShowNotFound   bool   `long:"showNotFound" description:"Don't filter out values marked 'Not Found'"`
 }
 
 func main() {
@@ -53,7 +54,7 @@ func main() {
 		log.SetLevel(log.ErrorLevel)
 	}
 
-	if !opts.System && !opts.Languages && !opts.Binaries && !opts.Browsers && !opts.Managers && !opts.Utilities && !opts.Servers {
+	if !opts.System && !opts.Languages && !opts.Binaries && !opts.Browsers && !opts.Managers && !opts.Utilities && !opts.Servers && !opts.Virtualization {
 		opts.System = true
 		opts.Languages = true
 		opts.Binaries = true
@@ -61,6 +62,7 @@ func main() {
 		opts.Managers = true
 		opts.Utilities = true
 		opts.Servers = true
+		opts.Virtualization = true
 	}
 
 	builder := envinfo.NewEnvInfoBuilder()
@@ -81,6 +83,9 @@ func main() {
 	}
 	if opts.Utilities {
 		builder.Utilities()
+	}
+	if opts.Virtualization {
+		builder.Virtualization()
 	}
 	if opts.Servers {
 		builder.Servers()
@@ -110,6 +115,9 @@ func main() {
 	}
 	if opts.Utilities {
 		PrintCLI("Utilities", envInfo.Utilities, os.Stdout, opts)
+	}
+	if opts.Virtualization {
+		PrintCLI("Virtualization", envInfo.Virtualization, os.Stdout, opts)
 	}
 	if opts.Servers {
 		PrintCLI("Servers", envInfo.Servers, os.Stdout, opts)

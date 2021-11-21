@@ -3,23 +3,25 @@ package envinfo
 import "sync"
 
 type EnvInfoBuilder struct {
-	languages bool
-	binaries  bool
-	managers  bool
-	browsers  bool
-	utilities bool
-	servers   bool
-	system    bool
+	languages      bool
+	binaries       bool
+	managers       bool
+	browsers       bool
+	utilities      bool
+	virtualization bool
+	servers        bool
+	system         bool
 }
 
 type EnvInfo struct {
-	Languages []*Item `json:"Languages,omitempty"`
-	Binaries  []*Item `json:"Binaries,omitempty"`
-	Managers  []*Item `json:"Managers,omitempty"`
-	Browsers  []*Item `json:"Browsers,omitempty"`
-	Utilities []*Item `json:"Utilities,omitempty"`
-	Servers   []*Item `json:"Servers,omitempty"`
-	System    *System `json:"System,omitempty"`
+	Languages      []*Item `json:"Languages,omitempty"`
+	Binaries       []*Item `json:"Binaries,omitempty"`
+	Managers       []*Item `json:"Managers,omitempty"`
+	Browsers       []*Item `json:"Browsers,omitempty"`
+	Utilities      []*Item `json:"Utilities,omitempty"`
+	Virtualization []*Item `json:"Virtualization,omitempty"`
+	Servers        []*Item `json:"Servers,omitempty"`
+	System         *System `json:"System,omitempty"`
 }
 
 type Item struct {
@@ -52,6 +54,10 @@ func (b *EnvInfoBuilder) Utilities() {
 	b.utilities = true
 }
 
+func (b *EnvInfoBuilder) Virtualization() {
+	b.virtualization = true
+}
+
 func (b *EnvInfoBuilder) Servers() {
 	b.servers = true
 }
@@ -82,6 +88,13 @@ func (b *EnvInfoBuilder) Build() *EnvInfo {
 		go func() {
 			defer wg.Done()
 			envinfo.Utilities = GetUtilities()
+		}()
+	}
+	if b.virtualization {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			envinfo.Virtualization = GetVirtualization()
 		}()
 	}
 	if b.servers {
