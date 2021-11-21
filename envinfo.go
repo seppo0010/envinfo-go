@@ -7,6 +7,7 @@ type EnvInfoBuilder struct {
 	binaries  bool
 	managers  bool
 	browsers  bool
+	utilities bool
 	system    bool
 }
 
@@ -15,6 +16,7 @@ type EnvInfo struct {
 	Binaries  []*Item `json:"Binaries,omitempty"`
 	Managers  []*Item `json:"Managers,omitempty"`
 	Browsers  []*Item `json:"Browsers,omitempty"`
+	Utilities []*Item `json:"Utilities,omitempty"`
 	System    *System `json:"System,omitempty"`
 }
 
@@ -44,6 +46,10 @@ func (b *EnvInfoBuilder) Browsers() {
 	b.browsers = true
 }
 
+func (b *EnvInfoBuilder) Utilities() {
+	b.utilities = true
+}
+
 func (b *EnvInfoBuilder) Languages() {
 	b.languages = true
 }
@@ -63,6 +69,13 @@ func (b *EnvInfoBuilder) Build() *EnvInfo {
 		go func() {
 			defer wg.Done()
 			envinfo.Browsers = GetBrowsers()
+		}()
+	}
+	if b.utilities {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			envinfo.Utilities = GetUtilities()
 		}()
 	}
 	if b.managers {
