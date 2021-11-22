@@ -26,6 +26,9 @@ func GetMysql() *Item {
 	b := NewGetItemBuilder("mysql", "MySQL")
 	return b.ParseVersion(func(unparsed string) string {
 		matches := b.regex.FindAllString(unparsed, 2)
+		if len(matches) == 0 {
+			return ""
+		}
 		v := matches[0]
 		if strings.Contains(unparsed, "Distrib") && len(matches) >= 2 {
 			v = matches[1]

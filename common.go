@@ -66,45 +66,54 @@ func (b *GetItemBuilder) ParseVersion(parseVersion func(string) string) *GetItem
 
 func (b *GetItemBuilder) Get() *Item {
 	start := time.Now()
-	log.WithFields(log.Fields{
-		"executable": b.executable,
-		"name":       b.name,
-		"flag":       b.flag,
-	}).Debug("looking for executable")
-
-	whichCmd := exec.Command("which", b.executable)
-	whichBytes, err := whichCmd.Output()
-	if err != nil {
+	which := b.executable
+	version := ""
+	wg := sync.WaitGroup{}
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
 		log.WithFields(log.Fields{
-			"name": b.name,
-		}).Warn("executable not found")
-		return &Item{
-			Name:    b.name,
-			Version: "",
-			Path:    "",
-		}
-	}
-	which := strings.TrimSpace(string(whichBytes))
-	cmd := exec.Command(string(which), b.flag)
-	var outb, errb bytes.Buffer
-	cmd.Stdout = &outb
-	cmd.Stderr = &errb
+			"executable": b.executable,
+			"name":       b.name,
+			"flag":       b.flag,
+		}).Debug("looking for executable")
 
-	_ = cmd.Run()
-	log.WithFields(log.Fields{
-		"name":   b.name,
-		"cmd":    []string{string(which), b.flag},
-		"stdout": string(outb.Bytes()),
-		"stderr": string(errb.Bytes()),
-	}).Debug("unparsed version")
-	var parseBytes []byte
-	if b.stdout {
-		parseBytes = append(parseBytes, outb.Bytes()...)
-	}
-	if b.stderr {
-		parseBytes = append(parseBytes, errb.Bytes()...)
-	}
-	version := strings.TrimSpace(b.parseVersion(string(parseBytes)))
+		whichCmd := exec.Command("which", b.executable)
+		whichBytes, err := whichCmd.Output()
+		if err != nil {
+			log.WithFields(log.Fields{
+				"name": b.name,
+			}).Warn("executable not found")
+			return
+		}
+		which = strings.TrimSpace(string(whichBytes))
+	}()
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		cmd := exec.Command(string(which), b.flag)
+		var outb, errb bytes.Buffer
+		cmd.Stdout = &outb
+		cmd.Stderr = &errb
+
+		_ = cmd.Run()
+		log.WithFields(log.Fields{
+			"name":   b.name,
+			"cmd":    []string{string(which), b.flag},
+			"stdout": string(outb.Bytes()),
+			"stderr": string(errb.Bytes()),
+		}).Debug("unparsed version")
+		var parseBytes []byte
+		if b.stdout {
+			parseBytes = append(parseBytes, outb.Bytes()...)
+		}
+		if b.stderr {
+			parseBytes = append(parseBytes, errb.Bytes()...)
+		}
+		version = strings.TrimSpace(b.parseVersion(string(parseBytes)))
+	}()
+	wg.Wait()
 	log.WithFields(log.Fields{
 		"name":     b.name,
 		"duration": time.Now().Sub(start),
