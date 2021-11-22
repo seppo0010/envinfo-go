@@ -11,10 +11,14 @@ jobs:
         with:
           go-version: '^1.13.1' # The Go version to download (if necessary) and use.
       - run: go version
-      - name: build
-        run: go build -o envinfo cmd/envinfo/*
+      - name: build linux
+        run: go build -o envinfo-linux cmd/envinfo/*
+      - name: build darwin
+        env:
+          GOOS: darwin
+        run: go build -o envinfo-darwin cmd/envinfo/*
       - name: version
-        run: echo "::set-output name=version::$(./envinfo --version)"
+        run: echo "::set-output name=version::$(./envinfo-linux --version)"
         id: version
       - name: release
         uses: actions/create-release@v1
@@ -32,6 +36,15 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./envinfo
+          asset_path: ./envinfo-linux
           asset_name: envinfo-linux
+          asset_content_type: application/binary
+      - name: upload darwin artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./envinfo-darwin
+          asset_name: envinfo-darwin
           asset_content_type: application/binary
