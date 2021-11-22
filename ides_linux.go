@@ -4,6 +4,7 @@
 package envinfo
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"path"
@@ -11,13 +12,16 @@ import (
 )
 
 func findStudioVersion(name, executable string) (*Item, error) {
-	studioPathBytes, _ := exec.Command("which", executable).Output()
+	studioPathBytes, _ := exec.Command("which", fmt.Sprintf("%s.sh", executable)).Output()
 	if len(studioPathBytes) == 0 {
-		return &Item{
-			Name:    name,
-			Version: "",
-			Path:    "",
-		}, nil
+		studioPathBytes = []byte(fmt.Sprintf("/snap/%s/current/bin/%s.sh", executable, executable))
+		if _, err := os.Stat(string(studioPathBytes)); err != nil {
+			return &Item{
+				Name:    name,
+				Version: "",
+				Path:    "",
+			}, nil
+		}
 	}
 
 	studioPath := strings.TrimSpace(string(studioPathBytes))
@@ -33,15 +37,15 @@ func findStudioVersion(name, executable string) (*Item, error) {
 
 func GetAndroidStudioVersions() (*Item, error) {
 	name := "Android Studio"
-	return findStudioVersion(name, "studio.sh")
+	return findStudioVersion(name, "studio")
 }
 
 func GetIntelliJVersion() (*Item, error) {
 	name := "IntelliJ"
-	return findStudioVersion(name, "idea.sh")
+	return findStudioVersion(name, "idea")
 }
 
 func GetPhpStormVersion() (*Item, error) {
 	name := "PhpStorm"
-	return findStudioVersion(name, "phpstorm.sh")
+	return findStudioVersion(name, "phpstorm")
 }
