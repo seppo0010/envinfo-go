@@ -9,6 +9,18 @@ import (
 	"strings"
 )
 
+var idesBundleIdentifiers = map[string]string{
+	"IntelliJ":     "com.jetbrains.intellij",
+	"PhpStorm":     "com.jetbrains.PhpStorm",
+	"Sublime Text": "com.sublimetext.3",
+	"WebStorm":     "com.jetbrains.WebStorm",
+}
+
+func GetIntelliJVersion() (*Item, error) {
+	name := "IntelliJ"
+	return getApplication(name, idesBundleIdentifiers[name])
+}
+
 func GetAndroidStudioVersions() (*Item, error) {
 	for _, path := range []string{
 		"/Applications/Android Studio.app",

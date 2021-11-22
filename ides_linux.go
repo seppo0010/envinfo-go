@@ -10,9 +10,8 @@ import (
 	"strings"
 )
 
-func GetAndroidStudioVersions() (*Item, error) {
-	name := "Android Studio"
-	studioPathBytes, _ := exec.Command("which", "studio.sh").Output()
+func findStudioVersion(name, executable string) (*Item, error) {
+	studioPathBytes, _ := exec.Command("which", executable).Output()
 	if len(studioPathBytes) == 0 {
 		return &Item{
 			Name:    name,
@@ -30,4 +29,14 @@ func GetAndroidStudioVersions() (*Item, error) {
 		Version: string(version),
 		Path:    string(studioPath),
 	}, nil
+}
+
+func GetAndroidStudioVersions() (*Item, error) {
+	name := "Android Studio"
+	return findStudioVersion(name, "studio.sh")
+}
+
+func GetIntelliJVersion() (*Item, error) {
+	name := "IntelliJ"
+	return findStudioVersion(name, "idea.sh")
 }
