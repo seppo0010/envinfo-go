@@ -1,7 +1,7 @@
 package envinfo
 
 func GetBrowsers() []*Item {
-	return getItems([]func() (*Item, error){
+	return getItems([]func() *Item{
 		GetBraveVersion,
 		GetChromeVersion,
 		GetChromeCanaryVersion,

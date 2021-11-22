@@ -1,7 +1,7 @@
 package envinfo
 
 func GetUtilities() []*Item {
-	return getItems([]func() (*Item, error){
+	return getItems([]func() *Item{
 		GetBazelVersion,
 		GetCMakeVersion,
 		GetGCCVersion,
@@ -15,42 +15,42 @@ func GetUtilities() []*Item {
 	})
 }
 
-func GetBazelVersion() (*Item, error) {
+func GetBazelVersion() *Item {
 	return GetItem("bazel", "Bazel")
 }
 
-func GetCMakeVersion() (*Item, error) {
+func GetCMakeVersion() *Item {
 	return GetItem("cmake", "CMake")
 }
 
-func GetGCCVersion() (*Item, error) {
+func GetGCCVersion() *Item {
 	return GetItem("gcc", "GCC")
 }
 
-func GetClangVersion() (*Item, error) {
+func GetClangVersion() *Item {
 	return GetItem("clang", "Clang")
 }
 
-func GetGitVersion() (*Item, error) {
+func GetGitVersion() *Item {
 	return GetItem("git", "Git")
 }
 
-func GetMakeVersion() (*Item, error) {
+func GetMakeVersion() *Item {
 	return GetItem("make", "Make")
 }
 
-func GetNinjaVersion() (*Item, error) {
+func GetNinjaVersion() *Item {
 	return GetItem("ninja", "Ninja")
 }
 
-func GetMercurialVersion() (*Item, error) {
+func GetMercurialVersion() *Item {
 	return GetItem("hg", "Mercurial")
 }
 
-func GetSubversionVersion() (*Item, error) {
+func GetSubversionVersion() *Item {
 	return GetItem("svn", "Subversion")
 }
 
-func GetFFmpegVersion() (*Item, error) {
+func GetFFmpegVersion() *Item {
 	return GetItem("ffmpeg", "FFmpeg")
 }

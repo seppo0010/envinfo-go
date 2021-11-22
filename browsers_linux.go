@@ -3,58 +3,58 @@
 
 package envinfo
 
-func GetBraveVersion() (*Item, error) {
-	item, _ := GetItem("brave", "Brave Browser")
+func GetBraveVersion() *Item {
+	item := GetItem("brave", "Brave Browser")
 	if item.Version != "" {
-		return item, nil
+		return item
 	}
 	return GetItem("brave-browser", "Brave Browser")
 }
 
-func GetChromeVersion() (*Item, error) {
+func GetChromeVersion() *Item {
 	return GetItem("google-chrome", "Chrome")
 }
 
-func GetChromeCanaryVersion() (*Item, error) {
+func GetChromeCanaryVersion() *Item {
 	return &Item{
 		Name:    "Google Chrome Canary",
 		Path:    "",
 		Version: "",
-	}, nil
+	}
 }
 
-func GetChromiumVersion() (*Item, error) {
+func GetChromiumVersion() *Item {
 	return GetItem("chromium", "Chromium")
 }
 
-func GetEdgeVersion() (*Item, error) {
+func GetEdgeVersion() *Item {
 	return &Item{
 		Name:    "Microsoft Edge",
 		Path:    "",
 		Version: "",
-	}, nil
+	}
 }
 
-func GetFirefoxVersion() (*Item, error) {
+func GetFirefoxVersion() *Item {
 	return GetItem("firefox", "Firefox")
 }
 
-func GetFirefoxNightlyVersion() (*Item, error) {
+func GetFirefoxNightlyVersion() *Item {
 	return GetItem("firefox-trunk", "Firefox Nightly")
 }
 
-func GetFirefoxDeveloperEditionVersion() (*Item, error) {
+func GetFirefoxDeveloperEditionVersion() *Item {
 	return &Item{
 		Name:    "Firefox Developer Edition",
 		Path:    "",
 		Version: "",
-	}, nil
+	}
 }
 
-func GetSafariVersion() (*Item, error) {
+func GetSafariVersion() *Item {
 	return &Item{
 		Name:    "Safari",
 		Path:    "",
 		Version: "",
-	}, nil
+	}
 }

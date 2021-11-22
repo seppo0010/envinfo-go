@@ -16,47 +16,47 @@ var browserBundleIdentifiers = map[string]string{
 	"Safari Technology Preview": "com.apple.SafariTechnologyPreview",
 }
 
-func GetBraveVersion() (*Item, error) {
+func GetBraveVersion() *Item {
 	name := "Brave Browser"
 	return getApplication(name, browserBundleIdentifiers[name])
 }
 
-func GetChromeVersion() (*Item, error) {
+func GetChromeVersion() *Item {
 	name := "Chrome"
 	return getApplication(name, browserBundleIdentifiers[name])
 }
 
-func GetChromeCanaryVersion() (*Item, error) {
+func GetChromeCanaryVersion() *Item {
 	name := "Chrome Canary"
 	return getApplication(name, browserBundleIdentifiers[name])
 }
 
-func GetChromiumVersion() (*Item, error) {
+func GetChromiumVersion() *Item {
 	name := "Chromium"
 	return getApplication(name, browserBundleIdentifiers[name])
 }
 
-func GetEdgeVersion() (*Item, error) {
+func GetEdgeVersion() *Item {
 	name := "Microsoft Edge"
 	return getApplication(name, browserBundleIdentifiers[name])
 }
 
-func GetFirefoxVersion() (*Item, error) {
+func GetFirefoxVersion() *Item {
 	name := "Firefox"
 	return getApplication(name, browserBundleIdentifiers[name])
 }
 
-func GetFirefoxDeveloperEditionVersion() (*Item, error) {
+func GetFirefoxDeveloperEditionVersion() *Item {
 	name := "Firefox Developer Edition"
 	return getApplication(name, browserBundleIdentifiers[name])
 }
 
-func GetFirefoxNightlyVersion() (*Item, error) {
+func GetFirefoxNightlyVersion() *Item {
 	name := "Firefox Nightly"
 	return getApplication(name, browserBundleIdentifiers[name])
 }
 
-func GetSafariVersion() (*Item, error) {
+func GetSafariVersion() *Item {
 	name := "Safari"
 	return getApplication(name, browserBundleIdentifiers[name])
 }

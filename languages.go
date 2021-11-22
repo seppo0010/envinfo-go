@@ -9,7 +9,7 @@ import (
 )
 
 func GetLanguages() []*Item {
-	return getItems([]func() (*Item, error){
+	return getItems([]func() *Item{
 		GetGoVersion,
 		GetNodeVersion,
 		GetBashVersion,
@@ -28,27 +28,27 @@ func GetLanguages() []*Item {
 	})
 }
 
-func GetNodeVersion() (*Item, error) {
+func GetNodeVersion() *Item {
 	return GetItem("node", "Node")
 }
 
-func GetBashVersion() (*Item, error) {
+func GetBashVersion() *Item {
 	return GetItem("bash", "Bash")
 }
 
-func GetElixirVersion() (*Item, error) {
+func GetElixirVersion() *Item {
 	versionRegex := regexp.MustCompile(`[Elixir]+\s[\d+.[\d+|.]+`)
-	item, err := NewGetItemBuilder("elixir", "Elixir").Regex(versionRegex).Get()
-	if err != nil {
-		return nil, err
+	item := NewGetItemBuilder("elixir", "Elixir").Regex(versionRegex).Get()
+	if item == nil {
+		return nil
 	}
 	if len(item.Version) > 7 {
 		item.Version = item.Version[7:]
 	}
-	return item, nil
+	return item
 }
 
-func GetErlangVersion() (*Item, error) {
+func GetErlangVersion() *Item {
 	name := "Erlang"
 	executable := "erl"
 	log.WithFields(log.Fields{
@@ -60,7 +60,7 @@ func GetErlangVersion() (*Item, error) {
 	whichBytes, err := cmd.Output()
 	if err != nil {
 		log.WithFields(log.Fields{}).Warn("executable not found")
-		return nil, err
+		return nil
 	}
 	which := strings.TrimSpace(string(whichBytes))
 	cmd = exec.Command(string(which), "-eval", "{ok, Version} = file:read_file(filename:join([code:root_dir(), 'releases', erlang:system_info(otp_release), 'OTP_VERSION'])), io:fwrite(Version), halt().", "-noshell")
@@ -69,46 +69,46 @@ func GetErlangVersion() (*Item, error) {
 		Name:    name,
 		Version: strings.TrimSpace(string(stdout)),
 		Path:    string(which),
-	}, nil
+	}
 }
 
-func GetJavaVersion() (*Item, error) {
+func GetJavaVersion() *Item {
 	regex := regexp.MustCompile(`\d+\.?[\w+|.|_|-]+`)
 	return NewGetItemBuilder("javac", "Java").Flag("-version").Regex(regex).Stderr().Get()
 }
 
-func GetPerlVersion() (*Item, error) {
+func GetPerlVersion() *Item {
 	return GetItem("perl", "Perl")
 }
 
-func GetPHPVersion() (*Item, error) {
+func GetPHPVersion() *Item {
 	return GetItem("php", "PHP")
 }
 
-func GetProtocVersion() (*Item, error) {
+func GetProtocVersion() *Item {
 	return GetItem("protoc", "Protoc")
 }
 
-func GetPythonVersion() (*Item, error) {
+func GetPythonVersion() *Item {
 	return NewGetItemBuilder("python", "Python").Stderr().NoStdout().Get()
 }
 
-func GetPython3Version() (*Item, error) {
+func GetPython3Version() *Item {
 	return GetItem("python3", "Python3")
 }
 
-func GetRVersion() (*Item, error) {
+func GetRVersion() *Item {
 	return GetItem("R", "R")
 }
 
-func GetRubyVersion() (*Item, error) {
+func GetRubyVersion() *Item {
 	return GetItem("ruby", "Ruby")
 }
 
-func GetRustVersion() (*Item, error) {
+func GetRustVersion() *Item {
 	return GetItem("rustc", "Rust")
 }
 
-func GetScalaVersion() (*Item, error) {
+func GetScalaVersion() *Item {
 	return GetItem("scalac", "Scala")
 }

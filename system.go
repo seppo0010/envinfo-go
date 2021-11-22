@@ -40,8 +40,8 @@ func getShell() string {
 		log.WithFields(log.Fields{}).Warn("unknown shell")
 		return "N/A"
 	}
-	item, err := GetItem(shell, shell)
-	if err != nil {
+	item := GetItem(shell, shell)
+	if item == nil {
 		return "Unknown"
 	}
 	return fmt.Sprintf("%s - %s", item.Version, item.Path)

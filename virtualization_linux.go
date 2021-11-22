@@ -3,10 +3,10 @@
 
 package envinfo
 
-func GetVMWareFusionVersion() (*Item, error) {
+func GetVMWareFusionVersion() *Item {
 	return &Item{
 		Name:    "VMWare Fusion",
 		Path:    "",
 		Version: "",
-	}, nil
+	}
 }

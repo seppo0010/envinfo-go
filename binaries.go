@@ -1,21 +1,21 @@
 package envinfo
 
 func GetBinaries() []*Item {
-	return getItems([]func() (*Item, error){GetNodeVersion, GetNpmVersion, GetYarnVersion, GetWatchmanVersion})
+	return getItems([]func() *Item{GetNodeVersion, GetNpmVersion, GetYarnVersion, GetWatchmanVersion})
 }
 
-func GetGoVersion() (*Item, error) {
+func GetGoVersion() *Item {
 	return NewGetItemBuilder("go", "Go").Flag("version").Get()
 }
 
-func GetNpmVersion() (*Item, error) {
+func GetNpmVersion() *Item {
 	return GetItem("npm", "npm")
 }
 
-func GetYarnVersion() (*Item, error) {
+func GetYarnVersion() *Item {
 	return GetItem("yarn", "Yarn")
 }
 
-func GetWatchmanVersion() (*Item, error) {
+func GetWatchmanVersion() *Item {
 	return GetItem("watchman", "Watchman")
 }

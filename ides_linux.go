@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-func findStudioVersion(name, executable string) (*Item, error) {
+func findStudioVersion(name, executable string) *Item {
 	studioPathBytes, _ := exec.Command("which", fmt.Sprintf("%s.sh", executable)).Output()
 	if len(studioPathBytes) == 0 {
 		studioPathBytes = []byte(fmt.Sprintf("/snap/%s/current/bin/%s.sh", executable, executable))
@@ -20,7 +20,7 @@ func findStudioVersion(name, executable string) (*Item, error) {
 				Name:    name,
 				Version: "",
 				Path:    "",
-			}, nil
+			}
 		}
 	}
 
@@ -32,25 +32,25 @@ func findStudioVersion(name, executable string) (*Item, error) {
 		Name:    name,
 		Version: string(version),
 		Path:    string(studioPath),
-	}, nil
+	}
 }
 
-func GetAndroidStudioVersions() (*Item, error) {
+func GetAndroidStudioVersions() *Item {
 	name := "Android Studio"
 	return findStudioVersion(name, "studio")
 }
 
-func GetIntelliJVersion() (*Item, error) {
+func GetIntelliJVersion() *Item {
 	name := "IntelliJ"
 	return findStudioVersion(name, "idea")
 }
 
-func GetPhpStormVersion() (*Item, error) {
+func GetPhpStormVersion() *Item {
 	name := "PhpStorm"
 	return findStudioVersion(name, "phpstorm")
 }
 
-func GetWebStormVersion() (*Item, error) {
+func GetWebStormVersion() *Item {
 	name := "WebStorm"
 	return findStudioVersion(name, "webstorm.sh")
 }

@@ -3,6 +3,6 @@
 
 package envinfo
 
-func GetVMWareFusionVersion() (*Item, error) {
+func GetVMWareFusionVersion() *Item {
 	return getApplication("VMWare Fusion", "com.vmware.fusion")
 }

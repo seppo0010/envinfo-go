@@ -16,22 +16,22 @@ var idesBundleIdentifiers = map[string]string{
 	"WebStorm":     "com.jetbrains.WebStorm",
 }
 
-func GetIntelliJVersion() (*Item, error) {
+func GetIntelliJVersion() *Item {
 	name := "IntelliJ"
 	return getApplication(name, idesBundleIdentifiers[name])
 }
 
-func GetPhpStormVersion() (*Item, error) {
+func GetPhpStormVersion() *Item {
 	name := "PhpStorm"
 	return getApplication(name, idesBundleIdentifiers[name])
 }
 
-func GetWebStormVersion() (*Item, error) {
+func GetWebStormVersion() *Item {
 	name := "WebStorm"
 	return getApplication(name, idesBundleIdentifiers[name])
 }
 
-func GetAndroidStudioVersions() (*Item, error) {
+func GetAndroidStudioVersions() *Item {
 	for _, path := range []string{
 		"/Applications/Android Studio.app",
 		"/Applications/JetBrains Toolbox/Android Studio.app",
@@ -42,8 +42,8 @@ func GetAndroidStudioVersions() (*Item, error) {
 				Path:    path,
 				Version: strings.TrimSpace(strings.Replace(string(version), "\n", " ", -1)),
 				Name:    "Android Studio",
-			}, nil
+			}
 		}
 	}
-	return nil, nil
+	return nil
 }

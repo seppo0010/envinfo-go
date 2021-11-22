@@ -1,7 +1,7 @@
 package envinfo
 
 func GetVirtualization() []*Item {
-	return getItems([]func() (*Item, error){
+	return getItems([]func() *Item{
 		GetDockerVersion,
 		GetParallelsVersion,
 		GetVirtualBoxVersion,
@@ -9,14 +9,14 @@ func GetVirtualization() []*Item {
 	})
 }
 
-func GetDockerVersion() (*Item, error) {
+func GetDockerVersion() *Item {
 	return NewGetItemBuilder("docker", "Docker").Flag("-v").Get()
 }
 
-func GetParallelsVersion() (*Item, error) {
+func GetParallelsVersion() *Item {
 	return NewGetItemBuilder("prlctl", "Parallels").Flag("-v").Get()
 }
 
-func GetVirtualBoxVersion() (*Item, error) {
+func GetVirtualBoxVersion() *Item {
 	return NewGetItemBuilder("vboxmanage", "VirtualBox").Flag("-v").Get()
 }

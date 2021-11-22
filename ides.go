@@ -1,7 +1,7 @@
 package envinfo
 
 func GetIDEs() []*Item {
-	return getItems([]func() (*Item, error){
+	return getItems([]func() *Item{
 		GetAndroidStudioVersions,
 		// TODO: Sublime Text
 		// TODO: Xcode
@@ -17,26 +17,26 @@ func GetIDEs() []*Item {
 	})
 }
 
-func GetAtomVersion() (*Item, error) {
+func GetAtomVersion() *Item {
 	return GetItem("atom", "Atom")
 }
 
-func GetEmacsVersion() (*Item, error) {
+func GetEmacsVersion() *Item {
 	return GetItem("emacs", "Emacs")
 }
 
-func GetVIMVersion() (*Item, error) {
+func GetVIMVersion() *Item {
 	return GetItem("vim", "Vim")
 }
 
-func GetVSCodeVersion() (*Item, error) {
+func GetVSCodeVersion() *Item {
 	return GetItem("code", "VSCode")
 }
 
-func GetNanoVersion() (*Item, error) {
+func GetNanoVersion() *Item {
 	return GetItem("nano", "Nano")
 }
 
-func GetNvimVersion() (*Item, error) {
+func GetNvimVersion() *Item {
 	return GetItem("nvim", "Nvim")
 }

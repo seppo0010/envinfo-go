@@ -53,7 +53,7 @@ func (b *GetItemBuilder) Flag(flag string) *GetItemBuilder {
 	return b
 }
 
-func (b *GetItemBuilder) Get() (*Item, error) {
+func (b *GetItemBuilder) Get() *Item {
 	start := time.Now()
 	log.WithFields(log.Fields{
 		"executable": b.executable,
@@ -71,7 +71,7 @@ func (b *GetItemBuilder) Get() (*Item, error) {
 			Name:    b.name,
 			Version: "",
 			Path:    "",
-		}, nil
+		}
 	}
 	which := strings.TrimSpace(string(whichBytes))
 	cmd := exec.Command(string(which), b.flag)
@@ -102,10 +102,10 @@ func (b *GetItemBuilder) Get() (*Item, error) {
 		Name:    b.name,
 		Version: version,
 		Path:    string(which),
-	}, nil
+	}
 }
 
-func GetItem(executable, name string) (*Item, error) {
+func GetItem(executable, name string) *Item {
 	return NewGetItemBuilder(executable, name).Flag("--version").Get()
 }
 
@@ -115,14 +115,14 @@ func (a ByName) Len() int           { return len(a) }
 func (a ByName) Less(i, j int) bool { return a[i].Name < a[j].Name }
 func (a ByName) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 
-func getItems(funcs []func() (*Item, error)) []*Item {
+func getItems(funcs []func() *Item) []*Item {
 	results := make(chan (*Item), len(funcs))
 	var wg sync.WaitGroup
 	for _, f := range funcs {
 		wg.Add(1)
-		go func(f func() (*Item, error)) {
+		go func(f func() *Item) {
 			defer wg.Done()
-			res, _ := f()
+			res := f()
 			results <- res
 		}(f)
 	}
