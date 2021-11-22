@@ -40,3 +40,8 @@ func GetIntelliJVersion() (*Item, error) {
 	name := "IntelliJ"
 	return findStudioVersion(name, "idea.sh")
 }
+
+func GetPhpStormVersion() (*Item, error) {
+	name := "PhpStorm"
+	return findStudioVersion(name, "phpstorm.sh")
+}

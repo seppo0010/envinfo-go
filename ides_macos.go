@@ -21,6 +21,11 @@ func GetIntelliJVersion() (*Item, error) {
 	return getApplication(name, idesBundleIdentifiers[name])
 }
 
+func GetPhpStormVersion() (*Item, error) {
+	name := "PhpStorm"
+	return getApplication(name, idesBundleIdentifiers[name])
+}
+
 func GetAndroidStudioVersions() (*Item, error) {
 	for _, path := range []string{
 		"/Applications/Android Studio.app",
@@ -37,25 +42,3 @@ func GetAndroidStudioVersions() (*Item, error) {
 	}
 	return nil, nil
 }
-
-/*
-   .then(version => {
-     if (!version) {
-       return utils.run(
-         utils.generatePlistBuddyCommand(
-           path.join(
-             '~',
-             'Applications',
-             'JetBrains\\ Toolbox',
-             'Android\\ Studio.app',
-             'Contents',
-             'Info.plist'
-           ),
-           ['CFBundleShortVersionString', 'CFBundleVersion']
-         )
-       );
-     }
-     return version;
-   })
-   .then(version => version.split('\n').join(' '));
-*/
