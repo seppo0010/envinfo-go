@@ -27,6 +27,7 @@ type Options struct {
 	Servers        bool   `long:"servers" description:"Get version numbers of installed servers"`
 	SDKs           bool   `long:"sdks" description:"Get version numbers of installed sdks"`
 	IDEs           bool   `long:"ides" description:"Get version numbers of installed IDEs"`
+	Databases      bool   `long:"databases" description:"Get version numbers of installed databases"`
 	JSON           bool   `long:"json" description:"Print output in JSON format"`
 	ShowNotFound   bool   `long:"showNotFound" description:"Don't filter out values marked 'Not Found'"`
 }
@@ -60,7 +61,7 @@ func main() {
 		log.SetLevel(log.ErrorLevel)
 	}
 
-	if !opts.System && !opts.Languages && !opts.Binaries && !opts.Browsers && !opts.Managers && !opts.Utilities && !opts.Servers && !opts.Virtualization && !opts.SDKs && !opts.IDEs {
+	if !opts.System && !opts.Languages && !opts.Binaries && !opts.Browsers && !opts.Managers && !opts.Utilities && !opts.Servers && !opts.Virtualization && !opts.SDKs && !opts.IDEs && !opts.Databases {
 		opts.System = true
 		opts.Languages = true
 		opts.Binaries = true
@@ -71,6 +72,7 @@ func main() {
 		opts.Virtualization = true
 		opts.SDKs = true
 		opts.IDEs = true
+		opts.Databases = true
 	}
 
 	builder := envinfo.NewEnvInfoBuilder()
@@ -103,6 +105,9 @@ func main() {
 	}
 	if opts.IDEs {
 		builder.IDEs()
+	}
+	if opts.Databases {
+		builder.Databases()
 	}
 	envInfo := builder.Build()
 
@@ -142,6 +147,9 @@ func main() {
 	}
 	if opts.IDEs {
 		PrintCLI("IDEs", envInfo.IDEs, w, opts)
+	}
+	if opts.Databases {
+		PrintCLI("Databases", envInfo.Databases, w, opts)
 	}
 	w.Flush()
 	log.WithFields(log.Fields{

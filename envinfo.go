@@ -17,6 +17,7 @@ type EnvInfoBuilder struct {
 	servers        bool
 	sdks           bool
 	ides           bool
+	databases      bool
 	system         bool
 }
 
@@ -31,6 +32,7 @@ type EnvInfo struct {
 	Browsers       []*Item `json:"Browsers,omitempty"`
 	Utilities      []*Item `json:"Utilities,omitempty"`
 	IDEs           []*Item `json:"IDEs,omitempty"`
+	Databases      []*Item `json:"Databases,omitempty"`
 	Virtualization []*Item `json:"Virtualization,omitempty"`
 	Servers        []*Item `json:"Servers,omitempty"`
 	SDKs           *SDKs   `json:"SDKs,omitempty"`
@@ -77,6 +79,10 @@ func (b *EnvInfoBuilder) Servers() {
 
 func (b *EnvInfoBuilder) SDKs() {
 	b.sdks = true
+}
+
+func (b *EnvInfoBuilder) Databases() {
+	b.databases = true
 }
 
 func (b *EnvInfoBuilder) IDEs() {
@@ -177,6 +183,17 @@ func (b *EnvInfoBuilder) Build() *EnvInfo {
 			log.WithFields(log.Fields{
 				"duration": time.Now().Sub(start),
 			}).Debug("ides time")
+		}()
+	}
+	if b.databases {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			start := time.Now()
+			envinfo.Databases = GetDatabases()
+			log.WithFields(log.Fields{
+				"duration": time.Now().Sub(start),
+			}).Debug("databases time")
 		}()
 	}
 	if b.managers {
