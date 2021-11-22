@@ -2,7 +2,7 @@ package envinfo
 
 func GetIDEs() []*Item {
 	return getItems([]func() (*Item, error){
-		// TODO: Android Studio
+		GetAndroidStudioVersions,
 		// TODO: IntelliJ
 		// TODO: Nano
 		// TODO: Nvim
