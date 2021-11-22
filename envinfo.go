@@ -1,6 +1,11 @@
 package envinfo
 
-import "sync"
+import (
+	"sync"
+	"time"
+
+	log "github.com/sirupsen/logrus"
+)
 
 type EnvInfoBuilder struct {
 	languages      bool
@@ -83,85 +88,136 @@ func (b *EnvInfoBuilder) Languages() {
 }
 
 func (b *EnvInfoBuilder) Build() *EnvInfo {
+	start := time.Now()
 	envinfo := &EnvInfo{SDKs: &SDKs{}}
 	var wg sync.WaitGroup
 	if b.languages {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
+			start := time.Now()
 			envinfo.Languages = GetLanguages()
+			log.WithFields(log.Fields{
+				"duration": time.Now().Sub(start),
+			}).Debug("languages time")
 		}()
 	}
 	if b.browsers {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
+			start := time.Now()
 			envinfo.Browsers = GetBrowsers()
+			log.WithFields(log.Fields{
+				"duration": time.Now().Sub(start),
+			}).Debug("browsers time")
 		}()
 	}
 	if b.utilities {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
+			start := time.Now()
 			envinfo.Utilities = GetUtilities()
+			log.WithFields(log.Fields{
+				"duration": time.Now().Sub(start),
+			}).Debug("utilities time")
 		}()
 	}
 	if b.virtualization {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
+			start := time.Now()
 			envinfo.Virtualization = GetVirtualization()
+			log.WithFields(log.Fields{
+				"duration": time.Now().Sub(start),
+			}).Debug("virtualization time")
 		}()
 	}
 	if b.servers {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
+			start := time.Now()
 			envinfo.Servers = GetServers()
+			log.WithFields(log.Fields{
+				"duration": time.Now().Sub(start),
+			}).Debug("servers time")
 		}()
 	}
 	if b.sdks {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
+			start := time.Now()
 			version, _ := GetIOSVersions()
 			envinfo.SDKs.IOS = version
+			log.WithFields(log.Fields{
+				"duration": time.Now().Sub(start),
+			}).Debug("ios sdk time")
 		}()
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
+			start := time.Now()
 			version, _ := GetAndroidVersions()
 			envinfo.SDKs.Android = version
+			log.WithFields(log.Fields{
+				"duration": time.Now().Sub(start),
+			}).Debug("android sdk time")
 		}()
 	}
 	if b.ides {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
+			start := time.Now()
 			envinfo.IDEs = GetIDEs()
+			log.WithFields(log.Fields{
+				"duration": time.Now().Sub(start),
+			}).Debug("ides time")
 		}()
 	}
 	if b.managers {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
+			start := time.Now()
 			envinfo.Managers = GetManagers()
+			log.WithFields(log.Fields{
+				"duration": time.Now().Sub(start),
+			}).Debug("managers time")
 		}()
 	}
 	if b.binaries {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
+			start := time.Now()
 			envinfo.Binaries = GetBinaries()
+			log.WithFields(log.Fields{
+				"duration": time.Now().Sub(start),
+			}).Debug("binaries time")
 		}()
 	}
 	if b.system {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
+			start := time.Now()
 			envinfo.System = GetSystem()
+			log.WithFields(log.Fields{
+				"duration": time.Now().Sub(start),
+			}).Debug("system time")
 		}()
 	}
+	log.WithFields(log.Fields{
+		"duration": time.Now().Sub(start),
+	}).Debug("will wait")
 	wg.Wait()
+	log.WithFields(log.Fields{
+		"duration": time.Now().Sub(start),
+	}).Debug("did wait")
 	return envinfo
 }

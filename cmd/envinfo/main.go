@@ -1,10 +1,12 @@
 package main
 
 import (
+	"bufio"
 	"encoding/json"
 	"io"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/jessevdk/go-flags"
 	log "github.com/sirupsen/logrus"
@@ -30,6 +32,7 @@ type Options struct {
 }
 
 func main() {
+	start := time.Now()
 	var opts = Options{}
 	_, err := flags.Parse(&opts)
 
@@ -109,36 +112,41 @@ func main() {
 		encoder.Encode(envInfo)
 		return
 	}
+	w := bufio.NewWriter(os.Stdout)
 	if opts.System {
-		PrintCLI("System", SystemToItems(envInfo.System), os.Stdout, opts)
+		PrintCLI("System", SystemToItems(envInfo.System), w, opts)
 	}
 	if opts.Languages {
-		PrintCLI("Languages", envInfo.Languages, os.Stdout, opts)
+		PrintCLI("Languages", envInfo.Languages, w, opts)
 	}
 	if opts.Binaries {
-		PrintCLI("Binaries", envInfo.Binaries, os.Stdout, opts)
+		PrintCLI("Binaries", envInfo.Binaries, w, opts)
 	}
 	if opts.Managers {
-		PrintCLI("Managers", envInfo.Managers, os.Stdout, opts)
+		PrintCLI("Managers", envInfo.Managers, w, opts)
 	}
 	if opts.Browsers {
-		PrintCLI("Browsers", envInfo.Browsers, os.Stdout, opts)
+		PrintCLI("Browsers", envInfo.Browsers, w, opts)
 	}
 	if opts.Utilities {
-		PrintCLI("Utilities", envInfo.Utilities, os.Stdout, opts)
+		PrintCLI("Utilities", envInfo.Utilities, w, opts)
 	}
 	if opts.Virtualization {
-		PrintCLI("Virtualization", envInfo.Virtualization, os.Stdout, opts)
+		PrintCLI("Virtualization", envInfo.Virtualization, w, opts)
 	}
 	if opts.Servers {
-		PrintCLI("Servers", envInfo.Servers, os.Stdout, opts)
+		PrintCLI("Servers", envInfo.Servers, w, opts)
 	}
 	if opts.SDKs {
-		PrintSDKs("SDKs", envInfo.SDKs, os.Stdout, opts)
+		PrintSDKs("SDKs", envInfo.SDKs, w, opts)
 	}
 	if opts.IDEs {
-		PrintCLI("IDEs", envInfo.IDEs, os.Stdout, opts)
+		PrintCLI("IDEs", envInfo.IDEs, w, opts)
 	}
+	w.Flush()
+	log.WithFields(log.Fields{
+		"duration": time.Now().Sub(start),
+	}).Debug("finishing")
 }
 
 func PrintCLI(title string, item []*envinfo.Item, w io.Writer, opts Options) {
