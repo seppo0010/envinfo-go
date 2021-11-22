@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"encoding/json"
+	"fmt"
 	"io"
 	"os"
 	"strings"
@@ -30,6 +31,7 @@ type Options struct {
 	Databases      bool   `long:"databases" description:"Get version numbers of installed databases"`
 	JSON           bool   `long:"json" description:"Print output in JSON format"`
 	ShowNotFound   bool   `long:"showNotFound" description:"Don't filter out values marked 'Not Found'"`
+	Version        bool   `long:"version" description:"Displays envinfo version"`
 }
 
 func main() {
@@ -43,6 +45,11 @@ func main() {
 
 	if err != nil {
 		os.Exit(1)
+		return
+	}
+
+	if opts.Version {
+		fmt.Println(VERSION)
 		return
 	}
 
