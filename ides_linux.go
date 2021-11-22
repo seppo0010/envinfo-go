@@ -49,3 +49,8 @@ func GetPhpStormVersion() (*Item, error) {
 	name := "PhpStorm"
 	return findStudioVersion(name, "phpstorm")
 }
+
+func GetWebStormVersion() (*Item, error) {
+	name := "WebStorm"
+	return findStudioVersion(name, "webstorm.sh")
+}

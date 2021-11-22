@@ -26,6 +26,11 @@ func GetPhpStormVersion() (*Item, error) {
 	return getApplication(name, idesBundleIdentifiers[name])
 }
 
+func GetWebStormVersion() (*Item, error) {
+	name := "WebStorm"
+	return getApplication(name, idesBundleIdentifiers[name])
+}
+
 func GetAndroidStudioVersions() (*Item, error) {
 	for _, path := range []string{
 		"/Applications/Android Studio.app",
