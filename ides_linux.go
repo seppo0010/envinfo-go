@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"regexp"
 	"strings"
 )
 
@@ -61,4 +62,8 @@ func GetXcodeVersion() *Item {
 		Path:    "",
 		Version: "",
 	}
+}
+
+func GetSublimeVersion() *Item {
+	return NewGetItemBuilder("subl", "Sublime Text").Regex(regexp.MustCompile(`\d+`)).Get()
 }

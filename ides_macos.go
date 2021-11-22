@@ -6,6 +6,7 @@ package envinfo
 import (
 	"fmt"
 	"os/exec"
+	"regexp"
 	"strings"
 )
 
@@ -14,6 +15,15 @@ var idesBundleIdentifiers = map[string]string{
 	"PhpStorm":     "com.jetbrains.PhpStorm",
 	"Sublime Text": "com.sublimetext.3",
 	"WebStorm":     "com.jetbrains.WebStorm",
+}
+
+func GetSublimeVersion() *Item {
+	name := "Sublime Text"
+	item := NewGetItemBuilder("subl", name).Regex(regexp.MustCompile(`\d+`)).Get()
+	if item == nil || item.Version == "" {
+		return getApplication(name, idesBundleIdentifiers[name])
+	}
+	return item
 }
 
 func GetIntelliJVersion() *Item {
