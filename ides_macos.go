@@ -47,3 +47,17 @@ func GetAndroidStudioVersions() *Item {
 	}
 	return nil
 }
+
+func GetXcodeVersion() *Item {
+	b := NewGetItemBuilder("xcodebuild", "Xcode")
+	return b.Flag("-version").ParseVersion(func(unparsed string) string {
+		splitted := strings.Split(unparsed, "Build version ")
+		if len(splitted) <= 1 {
+			return b.regex.FindString(unparsed)
+		}
+		return fmt.Sprintf("%s/%s",
+			b.regex.FindString(unparsed),
+			splitted[1],
+		)
+	}).Get()
+}

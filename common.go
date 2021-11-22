@@ -15,22 +15,28 @@ import (
 var versionRegex = regexp.MustCompile(`\d+\.[\d+|.]+`)
 
 type GetItemBuilder struct {
-	executable string
-	name       string
-	flag       string
-	regex      *regexp.Regexp
-	stdout     bool
-	stderr     bool
+	executable   string
+	name         string
+	flag         string
+	regex        *regexp.Regexp
+	stdout       bool
+	stderr       bool
+	parseVersion func(string) string
 }
 
 func NewGetItemBuilder(executable, name string) *GetItemBuilder {
-	return &GetItemBuilder{
+	var b *GetItemBuilder
+	b = &GetItemBuilder{
 		executable: executable,
 		name:       name,
 		flag:       "--version",
 		regex:      versionRegex,
 		stdout:     true,
+		parseVersion: func(unparsed string) string {
+			return b.regex.FindString(unparsed)
+		},
 	}
+	return b
 }
 
 func (b *GetItemBuilder) Regex(regex *regexp.Regexp) *GetItemBuilder {
@@ -50,6 +56,11 @@ func (b *GetItemBuilder) Stderr() *GetItemBuilder {
 
 func (b *GetItemBuilder) Flag(flag string) *GetItemBuilder {
 	b.flag = flag
+	return b
+}
+
+func (b *GetItemBuilder) ParseVersion(parseVersion func(string) string) *GetItemBuilder {
+	b.parseVersion = parseVersion
 	return b
 }
 
@@ -93,7 +104,7 @@ func (b *GetItemBuilder) Get() *Item {
 	if b.stderr {
 		parseBytes = append(parseBytes, errb.Bytes()...)
 	}
-	version := strings.TrimSpace(b.regex.FindString(string(parseBytes)))
+	version := strings.TrimSpace(b.parseVersion(string(parseBytes)))
 	log.WithFields(log.Fields{
 		"name":     b.name,
 		"duration": time.Now().Sub(start),

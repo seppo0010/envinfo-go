@@ -54,3 +54,11 @@ func GetWebStormVersion() *Item {
 	name := "WebStorm"
 	return findStudioVersion(name, "webstorm.sh")
 }
+
+func GetXcodeVersion() *Item {
+	return &Item{
+		Name:    "Xcode",
+		Path:    "",
+		Version: "",
+	}
+}

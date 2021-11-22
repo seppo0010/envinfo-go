@@ -4,7 +4,6 @@ func GetIDEs() []*Item {
 	return getItems([]func() *Item{
 		GetAndroidStudioVersions,
 		// TODO: Sublime Text
-		// TODO: Xcode
 		GetAtomVersion,
 		GetEmacsVersion,
 		GetIntelliJVersion,
@@ -14,6 +13,7 @@ func GetIDEs() []*Item {
 		GetVIMVersion,
 		GetVSCodeVersion,
 		GetWebStormVersion,
+		GetXcodeVersion,
 	})
 }
 
