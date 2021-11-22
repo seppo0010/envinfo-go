@@ -5,14 +5,15 @@ func GetIDEs() []*Item {
 		// TODO: Android Studio
 		// TODO: IntelliJ
 		// TODO: Nano
+		// TODO: Nvim
 		// TODO: PhpStorm
 		// TODO: Sublime Text
-		// TODO: VSCode
 		// TODO: WebStorm
 		// TODO: Xcode
 		GetAtomVersion,
 		GetEmacsVersion,
 		GetVIMVersion,
+		GetVSCodeVersion,
 	})
 }
 
@@ -26,4 +27,8 @@ func GetEmacsVersion() (*Item, error) {
 
 func GetVIMVersion() (*Item, error) {
 	return GetItem("vim", "Vim")
+}
+
+func GetVSCodeVersion() (*Item, error) {
+	return GetItem("code", "VSCode")
 }
