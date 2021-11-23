@@ -194,19 +194,19 @@ func SystemToItems(system *envinfo.System) []*envinfo.Item {
 		return []*envinfo.Item{}
 	}
 	items := []*envinfo.Item{
-		&envinfo.Item{
+		{
 			Name:    "OS",
 			Version: system.OS,
 		},
-		&envinfo.Item{
+		{
 			Name:    "CPU",
 			Version: system.CPU,
 		},
-		&envinfo.Item{
+		{
 			Name:    "Memory",
 			Version: system.Memory,
 		},
-		&envinfo.Item{
+		{
 			Name:    "Shell",
 			Version: system.Shell,
 		},

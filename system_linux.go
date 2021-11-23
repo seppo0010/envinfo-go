@@ -26,13 +26,3 @@ func getOS() string {
 	uname := strings.Join(strings.Split(strings.TrimSpace(string(unameBytes)), ".")[:2], ".")
 	return fmt.Sprintf("Linux %s %s %s", uname, name, version)
 }
-
-/*
-
-   version = utils.run('cat /etc/os-release').then(v => {
-     const distro = (v || '').match(/NAME="(.+)"/) || '';
-     const versionInfo = (v || '').match(/VERSION="(.+)"/) || ['', ''];
-     const versionStr = versionInfo !== null ? versionInfo[1] : '';
-     return `${distro[1]} ${versionStr}`.trim() || '';
-   });
-*/
